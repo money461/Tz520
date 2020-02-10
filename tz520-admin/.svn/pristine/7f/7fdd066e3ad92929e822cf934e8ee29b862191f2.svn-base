@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tz.mapper.vo.TzRoleFunctionMapperVo" >
+  <resultMap id="BaseResultMap" type="com.tz.pojo.TzRoleFunction" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="function_id" property="functionId" jdbcType="VARCHAR" />
+    <result column="role_id" property="roleId" jdbcType="VARCHAR" />
+    <result column="operater" property="operater" jdbcType="VARCHAR" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+   <insert id="batchInsertData" parameterType="java.util.List" >
+    insert into tz_role_function (id, function_id, role_id, operater, created_time, updated_time)
+    values 
+     <foreach collection="roleFunctionList" index="index" item="roleFunction"   separator="," >
+      ( #{roleFunction.id,jdbcType=VARCHAR}, #{roleFunction.functionId,jdbcType=VARCHAR}, #{roleFunction.roleId,jdbcType=VARCHAR}, 
+      #{roleFunction.operater,jdbcType=VARCHAR},NOW(), NOW() )
+     </foreach>
+  </insert>
+</mapper>

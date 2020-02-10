@@ -1,0 +1,29 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.tz520</groupId>
+    <artifactId>tz520</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+  <artifactId>tz520-order-web</artifactId>
+  <version>${tz520-order-web.version}</version>
+  <packaging>war</packaging>
+  <name>订单模块接口调用</name>
+  <description>订单模块接口调用</description>
+   <dependencies>
+  		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.tz520</groupId>
+			<artifactId>tz520-order-interfaces</artifactId>
+			<version>${tz520-order-interfaces.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>com.tz520</groupId>
+			<artifactId>tz520-pay-interfaces</artifactId>
+			<version>${tz520-pay-interfaces.version}</version>
+		</dependency>
+	</dependencies>
+</project>

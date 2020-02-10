@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tz.mapper.vo.TzAuthFunctionMapperVo" >
+  <resultMap id="BaseResultMap" type="com.tz.pojo.TzAuthFunction" >
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="name" jdbcType="VARCHAR" property="name" />
+    <result column="code" jdbcType="VARCHAR" property="code" />
+    <result column="description" jdbcType="VARCHAR" property="description" />
+    <result column="page" jdbcType="VARCHAR" property="page" />
+    <result column="generatemenu" jdbcType="VARCHAR" property="generatemenu" />
+    <result column="zindex" jdbcType="CHAR" property="zindex" />
+    <result column="p_id" jdbcType="VARCHAR" property="pId" />
+    <result column="operater" jdbcType="VARCHAR" property="operater" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+  </resultMap>
+    <sql id="Base_Column_List" >
+    id, name, code, description, page, generatemenu, zindex, p_id, operater, created_time, 
+    updated_time
+  </sql>
+  
+  <resultMap type="java.lang.String" id="queryAuthFunctionCodeMap">
+  	<result column="code" jdbcType="VARCHAR" property="code" />
+  </resultMap>
+  <select id="queryAuthFunctionCode" resultMap="queryAuthFunctionCodeMap" parameterType="java.lang.String" >
+		   SELECT
+			tz_auth_function.`code`
+		FROM
+			tz_auth_function
+	 <if test="id!=null">
+	  LEFT JOIN tz_role_function ON tz_auth_function.id = tz_role_function.function_id
+	  LEFT JOIN tz_role ON tz_role_function.role_id = tz_role.id
+	  LEFT JOIN tz_manager_role on tz_role.id = tz_manager_role.role_id
+	  LEFT JOIN tz_manager on tz_manager_role.manager_id=tz_manager.id
+	where
+	  tz_manager.id=#{id,jdbcType=VARCHAR}
+	 </if>
+  </select>
+  
+  <select id="queryAllAuthFunctionCode" resultMap="queryAuthFunctionCodeMap" >
+  	SELECT
+		tz_auth_function.`code`
+	FROM
+  		tz_auth_function
+  </select>
+  
+  <!-- 权限列表查询 -->
+  <select id="selectAuthFunctionList" resultMap="BaseResultMap" parameterType="java.util.Map">
+  	   select
+	    <include refid="Base_Column_List" />
+	    from tz_auth_function 
+	    where
+	    1=1
+	   <if test ="name!= null">
+				AND tz_auth_function.name like  #{name,jdbcType=VARCHAR}
+		</if>
+		<if test ="code!=null">
+				AND tz_auth_function.code LIKE  #{code,jdbcType=VARCHAR}
+		</if>
+	    <if test ="startTime!= null">
+				AND  tz_auth_function.created_time between #{startTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
+		</if>
+		ORDER BY tz_auth_function.created_time DESC
+  </select>
+  
+  <!-- 根据父节点查询权限 查询id权限下是否有子权限-->
+  <select id="queryAuthFunctionBypId" resultMap="BaseResultMap" parameterType="java.lang.String">
+  	SELECT id FROM `tz_auth_function` where p_id=#{id,jdbcType=VARCHAR}
+  </select>
+  
+  <!-- 删除id权限下子权限 -->
+  <delete id="deleteAuthFunctionBypId" parameterType="java.lang.String">
+  	delete from tz_auth_function where p_id=#{id,jdbcType=VARCHAR}
+  </delete>
+  
+  <!-- 删除角色权限中间表数据 -->
+  <delete id="deleteRoleFunctionById" parameterType="java.util.List">
+	  	DELETE FROM tz_role_function WHERE function_id in 
+       <foreach collection="list" item="item" index="index"  open="(" separator="," close=")">
+		#{item}
+		</foreach> 	
+  </delete>
+  
+  <select id="queryAllFunction" resultMap="BaseResultMap">
+		  	SELECT
+			tz_auth_function.id,
+			tz_auth_function.p_id,
+			tz_auth_function.`name`,
+			tz_auth_function.zindex
+		FROM
+			`tz_auth_function`
+  </select>
+    
+</mapper>

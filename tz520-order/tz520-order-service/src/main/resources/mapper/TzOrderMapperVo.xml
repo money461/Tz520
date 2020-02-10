@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tz.mapper.vo.TzOrderMapperVo" >
+   <resultMap id="BaseResultMap" type="com.tz.pojo.vo.TzOrderVo" >
+   <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="shipping_code" property="shippingCode" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="payment" property="payment" jdbcType="DECIMAL" />
+    <result column="payment_type" property="paymentType" jdbcType="INTEGER" />
+    <result column="account" property="account" jdbcType="VARCHAR" />
+    <result column="love_value" property="loveValue" jdbcType="INTEGER" />
+    <result column="discount" property="discount" jdbcType="DECIMAL" />
+    <result column="discount_desc" property="discountDesc" jdbcType="VARCHAR" />
+    <result column="order_num" property="orderNum" jdbcType="INTEGER" />
+    <result column="post_fee" property="postFee" jdbcType="DECIMAL" />
+    <result column="mall_id" property="mallId" jdbcType="VARCHAR" />
+    <result column="buyer_nick" property="buyerNick" jdbcType="VARCHAR" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+    <result column="payment_time" property="paymentTime" jdbcType="TIMESTAMP" />
+    <result column="consign_time" property="consignTime" jdbcType="TIMESTAMP" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="close_time" property="closeTime" jdbcType="TIMESTAMP" />
+    <result column="operater" property="operater" jdbcType="VARCHAR" />
+    <result column="buyer_rate" property="buyerRate" jdbcType="INTEGER" />
+    <result column="buyer_message" property="buyerMessage" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="combo_num" property="comboNum" jdbcType="INTEGER" />
+    <result column="pay_single_item" property="paySingleItem" jdbcType="DECIMAL" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+       id, user_id, shipping_code, status, payment, payment_type, account, love_value, discount, 
+    discount_desc, order_num, post_fee, mall_id, buyer_nick, created_time, updated_time, 
+    payment_time, consign_time, end_time, close_time, operater, buyer_rate, buyer_message, 
+    type, combo_num, pay_single_item
+  </sql>
+  
+  <resultMap id="orderDetailMap" type="com.tz.pojo.vo.TzOrderVo">
+  	  <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="payment" property="payment" jdbcType="DECIMAL" />
+    <result column="payment_type" property="paymentType" jdbcType="INTEGER" />
+    <result column="account" property="account" jdbcType="VARCHAR" />
+    <result column="love_value" property="loveValue" jdbcType="INTEGER" />
+    <result column="discount" property="discount" jdbcType="DECIMAL" />
+    <result column="discount_desc" property="discountDesc" jdbcType="VARCHAR" />
+    <result column="order_num" property="orderNum" jdbcType="INTEGER" />
+    <result column="post_fee" property="postFee" jdbcType="DECIMAL" />
+    <result column="mall_id" property="mallId" jdbcType="VARCHAR" />
+    <result column="buyer_nick" property="buyerNick" jdbcType="VARCHAR" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+    <result column="payment_time" property="paymentTime" jdbcType="TIMESTAMP" />
+    <result column="consign_time" property="consignTime" jdbcType="TIMESTAMP" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="close_time" property="closeTime" jdbcType="TIMESTAMP" />
+    <result column="operater" property="operater" jdbcType="VARCHAR" />
+    <result column="buyer_rate" property="buyerRate" jdbcType="INTEGER" />
+    <result column="buyer_message" property="buyerMessage" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="combo_num" property="comboNum" jdbcType="INTEGER" />
+    <result column="pay_single_item" property="paySingleItem" jdbcType="DECIMAL" />
+    
+    <!-- 订单与物流信息一对一映射关系 -->
+    <association property="orderShipping" javaType="com.tz.pojo.TzOrderShipping">
+    <result column="com" property="com" jdbcType="VARCHAR" />
+     <result column="shipping_code" property="shippingCode" jdbcType="VARCHAR" />
+    <result column="receiver_name" property="receiverName" jdbcType="VARCHAR" />
+    <result column="receiver_mobile" property="receiverMobile" jdbcType="VARCHAR" />
+    <result column="receiver_state" property="receiverState" jdbcType="VARCHAR" />
+    <result column="receiver_city" property="receiverCity" jdbcType="VARCHAR" />
+    <result column="receiver_district" property="receiverDistrict" jdbcType="VARCHAR" />
+    <result column="receiver_address" property="receiverAddress" jdbcType="VARCHAR" />
+    </association>
+    
+    <!-- 订单id与订单商品表一对多映射关系 -->
+    <collection property="orderItems" ofType="com.tz.pojo.vo.TzOrderItemVo" >
+	    <result column="item_id" property="itemId" jdbcType="VARCHAR" />
+	    <result column="num" property="num" jdbcType="INTEGER" />
+		<result column="price" property="price" jdbcType="DECIMAL" />
+	    <result column="member_price" property="memberPrice" jdbcType="DECIMAL" />
+	    <result column="description" property="description" jdbcType="VARCHAR"/>
+	  	<result column="item_title" property="itemTitle" jdbcType="VARCHAR"/>
+	    <result column="real_price" property="realPrice" jdbcType="DECIMAL" />
+	    <result column="total_fee" property="totalFee" jdbcType="DECIMAL" />
+	    <result column="homepage_url" property="homepageUrl" jdbcType="VARCHAR" />
+    </collection>
+    
+  </resultMap>
+  
+  <!-- 查询订单详细信息 -->
+  <select id="queryOrderById" resultMap="orderDetailMap" parameterType="java.lang.String">
+		  		SELECT
+						t.*,
+						os.shipping_code,
+						os.com,
+						os.receiver_name,
+						os.receiver_mobile,
+						os.receiver_state,
+						os.receiver_city,
+						os.receiver_district,
+						os.receiver_address
+					FROM
+						(
+							SELECT
+								o.id,
+								o.status,
+								o.payment,
+								o.love_value,
+								o.order_num,
+								o.created_time,
+								o.updated_time,
+								o.payment_time,
+								o.consign_time,
+								o.close_time,
+								o.end_time,
+								o.post_fee,
+								o.buyer_message,
+								o.type,
+								oi.item_id,
+								oi.item_title,
+								oi.description,
+								oi.price,
+								oi.member_price,
+								oi.real_price,
+								oi.num,
+								oi.total_fee,
+								oi.homepage_url
+							FROM
+								tz_order o
+							LEFT JOIN tz_order_item oi ON o.id = oi.order_id
+						) t
+					LEFT JOIN tz_order_shipping os ON t.id = os.order_id
+					WHERE
+						t.id =#{orderId,jdbcType=VARCHAR}
+  	</select>
+  
+  <!-- 查询用户订单列表信息 -->
+  <resultMap type="com.tz.pojo.vo.TzOrderList" id="orderUserIdMap">
+  	<result column="order_id" property="orderId" jdbcType="VARCHAR" />
+  	<result column="payment" property="payment" jdbcType="VARCHAR" />
+  	<result column="status" property="status" jdbcType="INTEGER"/>
+  	<result column="post_fee" property="postFee" jdbcType="DECIMAL"/>
+  	 <result column="order_num" property="orderNum" jdbcType="INTEGER" />
+  	 <result column="shipping_code" property="shippingCode" jdbcType="VARCHAR" />
+  	  <result column="com" property="com" jdbcType="VARCHAR" />
+  	<!-- 订单对多个商品 -->
+  	<collection property="orderItems" ofType="com.tz.pojo.vo.TzOrderItemVo">
+	  	<result column="item_id" property="itemId" jdbcType="VARCHAR"/>
+	  	<result column="num" property="num" jdbcType="INTEGER"/>
+	  	<result column="description" property="description" jdbcType="VARCHAR"/>
+	  	<result column="item_title" property="itemTitle" jdbcType="VARCHAR"/>
+	  	<result column="price" property="price" jdbcType="DECIMAL"/>
+	  	<result column="member_price" property="memberPrice" jdbcType="DECIMAL"/>
+	  	<result column="real_price" property="realPrice" jdbcType="DECIMAL"/>
+	  	<result column="item_post" property="itemPost" jdbcType="DECIMAL"/>
+	  	<result column="total_fee" property="totalFee" jdbcType="DECIMAL"/>
+	  	<result column="homepage_url" property="homepageUrl" jdbcType="VARCHAR"/>
+  	</collection>
+  </resultMap>
+  
+  <select id="queryOrderByUserId" resultMap="orderUserIdMap" parameterType="java.util.HashMap" >
+		SELECT
+		oi.order_id,
+		o.status,
+		o.payment,
+		o.post_fee,
+		o.order_num,
+		oi.item_id,
+		oi.num,
+		oi.description,
+		oi.item_title,
+		oi.price,
+		oi.real_price,
+		oi.member_price,
+		oi.item_post,
+		oi.total_fee,
+		oi.homepage_url,
+	    os.shipping_code,
+	    os.com
+		FROM
+		tz_order o
+		INNER JOIN tz_order_item oi ON o.id = oi.order_id
+	  INNER JOIN tz_order_shipping os on o.id=os.order_id
+	  WHERE
+	o.user_id =#{userId,jdbcType=VARCHAR}
+	<if test="status!=null">
+		AND o.status = #{status,jdbcType=VARCHAR}
+	</if>
+	AND o.status NOT IN (0)
+	ORDER BY
+	o.created_time DESC
+  </select>
+  
+  
+  <!-- 查询默认的收货人信息 -->
+  <resultMap type="com.tz.pojo.TzReceiverinfo" id="defaultReceiverInfoMap">
+  		<id column="id" property="id" jdbcType="VARCHAR" />
+	    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+	    <result column="receiver_name" property="receiverName" jdbcType="VARCHAR" />
+	    <result column="receiver_mobile" property="receiverMobile" jdbcType="VARCHAR" />
+	    <result column="receiver_state" property="receiverState" jdbcType="VARCHAR" />
+	    <result column="receiver_city" property="receiverCity" jdbcType="VARCHAR" />
+	    <result column="receiver_district" property="receiverDistrict" jdbcType="VARCHAR" />
+	    <result column="receiver_address" property="receiverAddress" jdbcType="VARCHAR" />
+	    <result column="is_default" property="isDefault" jdbcType="INTEGER" />
+  </resultMap>
+  <select id="selectDefaultReceiverInfo" resultMap="defaultReceiverInfoMap" parameterType="java.lang.String">
+  		SELECT
+  		            tz_receiverinfo.id,
+					tz_receiverinfo.user_id,
+					tz_receiverinfo.receiver_name,
+					tz_receiverinfo.receiver_mobile,
+					tz_receiverinfo.receiver_state,
+					tz_receiverinfo.receiver_city,
+					tz_receiverinfo.receiver_district,
+					tz_receiverinfo.receiver_address,
+					tz_receiverinfo.is_default
+				FROM
+					`tz_receiverinfo`
+				WHERE
+					tz_receiverinfo.user_id = #{userId,jdbcType=VARCHAR}
+				AND tz_receiverinfo.is_default=1
+  </select>
+  
+  <!-- 根据商品id查询商品信息 -->
+  <resultMap type="com.tz.pojo.TzItem" id="selectItemByIdMap">
+    <result column="item_title" property="itemTitle" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="price" property="price" jdbcType="DECIMAL" />
+    <result column="member_price" property="memberPrice" jdbcType="DECIMAL" />
+    <result column="love_price" property="lovePrice" jdbcType="DECIMAL" />
+    <result column="homepage_url" property="homepageUrl" jdbcType="VARCHAR" />
+    <result column="category_id" property="categoryId" jdbcType="VARCHAR" />
+    <result column="item_post" property="itemPost" jdbcType="DECIMAL" />
+  </resultMap>
+  <select id="selectItemById" resultMap="selectItemByIdMap" parameterType="java.lang.String">
+	  	SELECT
+		tz_item.item_title,
+		tz_item.description,
+		tz_item.price,
+		tz_item.love_price,
+		tz_item.member_price,
+		tz_item.homepage_url,
+		tz_item.category_id,
+		tz_item.item_post
+	FROM
+		`tz_item`
+	WHERE
+		id =#{itemId,jdbcType=VARCHAR}
+  </select>
+  
+  <!-- 批量插入订单商品表数据 -->
+  <insert id="batchInsertItemData" parameterType="java.util.List">
+			INSERT INTO
+			 tz_order_item (
+			tz_order_item.id,
+			tz_order_item.order_id,
+			tz_order_item.item_id,
+			tz_order_item.num,
+			tz_order_item.description,
+			tz_order_item.item_title,
+			tz_order_item.price,
+			tz_order_item.real_price,
+			tz_order_item.member_price,
+			tz_order_item.item_post,
+			tz_order_item.total_fee,
+			tz_order_item.homepage_url,
+			tz_order_item.created_time,
+			tz_order_item.updated_time
+			) VALUES 
+  <foreach collection="orderItems" item="orderItem" index="index" separator=",">
+      ( #{orderItem.id},#{orderItem.orderId},#{orderItem.itemId},#{orderItem.num},#{orderItem.description},#{orderItem.itemTitle},#{orderItem.price},#{orderItem.realPrice},#{orderItem.memberPrice},#{orderItem.itemPost},#{orderItem.totalFee},#{orderItem.homepageUrl},#{orderItem.createdTime},#{orderItem.updatedTime})
+  </foreach>
+  </insert>
+  
+  <!-- 批量删除该用户购物车中该订单中商品数据-->
+  <delete id="batchDeleteCartData">
+  	DELETE FROM tz_cart 
+  	WHERE 
+  	tz_cart.user_id=#{userId,jdbcType=VARCHAR}
+  	AND item_id in 
+  	<foreach item="id" index="index" collection="itemIds" open="(" separator="," close=")">
+			#{id}
+    </foreach>
+  </delete>
+  
+  
+  <!-- 批量修改商品的销售额数量 与剩余商品数量-->
+  <update id="batchAlterSalesNum" parameterType="java.util.List">
+  	<foreach collection="itemList" item="item" index="index" open="" close="" separator=";">
+        update tz_item
+        <set>
+            num = num - ${item.num},
+            sales_num = sales_num + ${item.num}
+        </set>
+        where id = #{item.id}
+    </foreach>    
+  </update>
+  
+  <!-- 退还该用户订单抵扣的爱心值 -->
+  <update id="addLoveSurplus" parameterType="com.tz.pojo.TzUserLove">
+  	update tz_user_love
+  	  set love_surplus = love_surplus+ ${userLove.loveSurplus},
+  	     updated_time = #{userLove.updatedTime}
+  	WHERE
+	user_id =#{userLove.userId}
+  </update>
+  
+  <!-- 查询商品套餐的分类id -->
+  <select id="queryItemCategoryId" resultType="java.lang.Integer">
+  	  select id from tz_item_category where sort=4
+  </select>
+  
+  <!-- 查询用户等级 -->
+    <select id="queryUserType" resultType="java.lang.Integer" parameterType="java.lang.String">
+    SELECT type FROM `tz_user_mall` WHERE user_id= #{userId,jdbcType=VARCHAR}
+  </select>
+  
+  
+</mapper>

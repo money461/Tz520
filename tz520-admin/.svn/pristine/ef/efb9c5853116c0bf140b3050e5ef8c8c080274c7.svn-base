@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tz.mapper.TzMallMapper" >
+  <resultMap id="BaseResultMap" type="com.tz.pojo.TzMall" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="mall_name" property="mallName" jdbcType="VARCHAR" />
+    <result column="mall_url" property="mallUrl" jdbcType="VARCHAR" />
+    <result column="mall_status" property="mallStatus" jdbcType="INTEGER" />
+    <result column="mall_introduce" property="mallIntroduce" jdbcType="VARCHAR" />
+    <result column="mall_manager" property="mallManager" jdbcType="VARCHAR" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+    <result column="operater" property="operater" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, mall_name, mall_url, mall_status, mall_introduce, mall_manager, created_time, 
+    updated_time, operater
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.tz.pojo.TzMallExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tz_mall
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from tz_mall
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from tz_mall
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.tz.pojo.TzMallExample" >
+    delete from tz_mall
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.tz.pojo.TzMall" >
+    insert into tz_mall (id, mall_name, mall_url, 
+      mall_status, mall_introduce, mall_manager, 
+      created_time, updated_time, operater
+      )
+    values (#{id,jdbcType=VARCHAR}, #{mallName,jdbcType=VARCHAR}, #{mallUrl,jdbcType=VARCHAR}, 
+      #{mallStatus,jdbcType=INTEGER}, #{mallIntroduce,jdbcType=VARCHAR}, #{mallManager,jdbcType=VARCHAR}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP}, #{operater,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.tz.pojo.TzMall" >
+    insert into tz_mall
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="mallName != null" >
+        mall_name,
+      </if>
+      <if test="mallUrl != null" >
+        mall_url,
+      </if>
+      <if test="mallStatus != null" >
+        mall_status,
+      </if>
+      <if test="mallIntroduce != null" >
+        mall_introduce,
+      </if>
+      <if test="mallManager != null" >
+        mall_manager,
+      </if>
+      <if test="createdTime != null" >
+        created_time,
+      </if>
+      <if test="updatedTime != null" >
+        updated_time,
+      </if>
+      <if test="operater != null" >
+        operater,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="mallName != null" >
+        #{mallName,jdbcType=VARCHAR},
+      </if>
+      <if test="mallUrl != null" >
+        #{mallUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="mallStatus != null" >
+        #{mallStatus,jdbcType=INTEGER},
+      </if>
+      <if test="mallIntroduce != null" >
+        #{mallIntroduce,jdbcType=VARCHAR},
+      </if>
+      <if test="mallManager != null" >
+        #{mallManager,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null" >
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedTime != null" >
+        #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="operater != null" >
+        #{operater,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.tz.pojo.TzMallExample" resultType="java.lang.Integer" >
+    select count(*) from tz_mall
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update tz_mall
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mallName != null" >
+        mall_name = #{record.mallName,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mallUrl != null" >
+        mall_url = #{record.mallUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mallStatus != null" >
+        mall_status = #{record.mallStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.mallIntroduce != null" >
+        mall_introduce = #{record.mallIntroduce,jdbcType=VARCHAR},
+      </if>
+      <if test="record.mallManager != null" >
+        mall_manager = #{record.mallManager,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdTime != null" >
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updatedTime != null" >
+        updated_time = #{record.updatedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.operater != null" >
+        operater = #{record.operater,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update tz_mall
+    set id = #{record.id,jdbcType=VARCHAR},
+      mall_name = #{record.mallName,jdbcType=VARCHAR},
+      mall_url = #{record.mallUrl,jdbcType=VARCHAR},
+      mall_status = #{record.mallStatus,jdbcType=INTEGER},
+      mall_introduce = #{record.mallIntroduce,jdbcType=VARCHAR},
+      mall_manager = #{record.mallManager,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      updated_time = #{record.updatedTime,jdbcType=TIMESTAMP},
+      operater = #{record.operater,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tz.pojo.TzMall" >
+    update tz_mall
+    <set >
+      <if test="mallName != null" >
+        mall_name = #{mallName,jdbcType=VARCHAR},
+      </if>
+      <if test="mallUrl != null" >
+        mall_url = #{mallUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="mallStatus != null" >
+        mall_status = #{mallStatus,jdbcType=INTEGER},
+      </if>
+      <if test="mallIntroduce != null" >
+        mall_introduce = #{mallIntroduce,jdbcType=VARCHAR},
+      </if>
+      <if test="mallManager != null" >
+        mall_manager = #{mallManager,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null" >
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedTime != null" >
+        updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="operater != null" >
+        operater = #{operater,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tz.pojo.TzMall" >
+    update tz_mall
+    set mall_name = #{mallName,jdbcType=VARCHAR},
+      mall_url = #{mallUrl,jdbcType=VARCHAR},
+      mall_status = #{mallStatus,jdbcType=INTEGER},
+      mall_introduce = #{mallIntroduce,jdbcType=VARCHAR},
+      mall_manager = #{mallManager,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+      operater = #{operater,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,0 +1,265 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tz.mapper.vo.TzItemMapperVo" >
+  <resultMap id="BaseResultMap" type="com.tz.pojo.vo.TzItemVo" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="item_title" property="itemTitle" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="price" property="price" jdbcType="DECIMAL" />
+    <result column="member_price" property="memberPrice" jdbcType="DECIMAL" />
+    <result column="num" property="num" jdbcType="INTEGER" />
+    <result column="barcode" property="barcode" jdbcType="VARCHAR" />
+    <result column="category_id" property="categoryId" jdbcType="VARCHAR" />
+    <result column="image_url" property="imageUrl" jdbcType="VARCHAR" />
+    <result column="pricture_url" property="prictureUrl" jdbcType="VARCHAR" />
+    <result column="homepage_url" property="homepageUrl" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="operater" property="operater" jdbcType="VARCHAR" />
+    <result column="item_post" property="itemPost" jdbcType="DECIMAL" />
+    <result column="sales_num" property="salesNum" jdbcType="INTEGER" />
+    <result column="mall_id" property="mallId" jdbcType="VARCHAR" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, item_title, description, price, member_price, num, barcode, category_id, image_url, 
+    pricture_url, homepage_url, status, operater, item_post, sales_num, mall_id, created_time, 
+    updated_time
+  </sql>
+ 
+ <!-- 根据商品名称模糊搜索商品信息 -->
+  <select id="queryItemByItemTitle" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+ 			tz_item.id,
+			tz_item.item_title,
+			tz_item.description,
+			tz_item.price,
+			tz_item.member_price,
+		    tz_item.category_id,
+			tz_item.homepage_url
+    from 
+       tz_item
+	where tz_item.status=1
+    <if test ="itemTitle!= null">
+		AND tz_item.item_title LIKE '%${itemTitle}%'
+	</if>
+     ORDER BY tz_item.updated_time DESC
+  </select>
+  
+  <!-- 随机推荐3款商品 -->
+  <select id="recommendItem" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
+		  	SELECT
+			tz_item.id,
+			tz_item.item_title,
+			tz_item.description,
+			tz_item.price,
+			tz_item.member_price,
+			tz_item.homepage_url
+		FROM
+			tz_item
+		WHERE
+			tz_item. STATUS = 1
+		ORDER BY
+			rand()
+		LIMIT #{i,jdbcType=INTEGER}
+  </select>
+  
+  <!-- 按照分类id随机推荐2款商品 -->
+  <select id="recommendItemByCategory" resultMap="BaseResultMap" parameterType="java.util.List">
+  		  	SELECT
+			tz_item.id,
+			tz_item.item_title,
+			tz_item.description,
+			tz_item.price,
+			tz_item.member_price,
+			tz_item.homepage_url
+		FROM
+			tz_item
+		WHERE
+			tz_item. STATUS = 1
+			AND
+			category_id in
+			<foreach item="categoryId" index="index" collection="categoryIds" open="(" separator="," close=")">
+                   #{categoryId}
+             </foreach>
+		ORDER BY
+			rand()
+		LIMIT 2
+  </select>
+  
+  <!-- 查询商城首页商品信息 -->
+  <resultMap type="com.tz.pojo.vo.TzMallItem" id="selectIndexItemListMap">
+  	  <id column="category_id" property="id" jdbcType="INTEGER" />
+      <result column="name" property="name" jdbcType="VARCHAR" />
+      <result column="sort" property="sort" jdbcType="INTEGER" />
+      
+      <collection property="IndexItemList" ofType="com.tz.pojo.vo.TzItemVo">
+	     <id column="item_id" property="id" jdbcType="VARCHAR" />
+	    <result column="item_title" property="itemTitle" jdbcType="VARCHAR" />
+	    <result column="description" property="description" jdbcType="VARCHAR" />
+	    <result column="price" property="price" jdbcType="DECIMAL" />
+	    <result column="member_price" property="memberPrice" jdbcType="DECIMAL" />
+        <result column="homepage_url" property="homepageUrl" jdbcType="VARCHAR" />
+      </collection>
+  
+  </resultMap>
+  
+  <!--  查询商城首页商品数据-->
+  <select id="selectIndexItemList" resultMap="selectIndexItemListMap" >
+		SELECT
+				c.id category_id,
+				c. name,
+                c.sort,
+				t.id item_id,
+				t.item_title,
+				t.description,
+				t.price,
+				t.member_price,
+				t.homepage_url
+			FROM
+				tz_item_category c
+			INNER JOIN (
+				(
+					SELECT
+						*
+					FROM
+						tz_item
+					WHERE
+						category_id = (
+							SELECT
+								id
+							FROM
+								tz_item_category
+							WHERE
+								sort = 4
+						)
+          AND `status`=1
+					ORDER BY
+						updated_time DESC
+					LIMIT 10
+				)
+				UNION ALL
+					(
+						SELECT
+							*
+						FROM
+							`tz_item`
+						WHERE
+							category_id = (
+								SELECT
+									id
+								FROM
+									tz_item_category
+								WHERE
+									sort = 1
+							)
+             AND `status`=1
+						ORDER BY
+							updated_time DESC
+						LIMIT 2
+					)
+				UNION ALL
+					(
+						SELECT
+							*
+						FROM
+							`tz_item`
+						WHERE
+							category_id = (
+								SELECT
+									id
+								FROM
+									tz_item_category
+								WHERE
+									sort = 2
+							)
+						AND `status`=1
+						ORDER BY
+							updated_time DESC
+						LIMIT 2
+					)
+				UNION ALL
+					(
+						SELECT
+							*
+						FROM
+							`tz_item`
+						WHERE
+							category_id = (
+								SELECT
+									id
+								FROM
+									tz_item_category
+								WHERE
+									sort = 3
+							)
+             AND `status`=1
+						ORDER BY
+							updated_time DESC
+						LIMIT 1
+					)
+			) t ON t.category_id = c.id;
+  </select>
+  
+  <!-- 根据分类id查询商品信息 -->
+  <select id="selectItemByCategory" resultMap="BaseResultMap" parameterType="java.lang.String">
+		SELECT
+			tz_item.id,
+			tz_item.item_title,
+			tz_item.description,
+			tz_item.price,
+			tz_item.member_price,
+		    tz_item.category_id,
+			tz_item.homepage_url
+		FROM
+			tz_item
+		WHERE
+			tz_item. STATUS = 1
+		<if test ="id!= null">
+		  AND tz_item.category_id=#{id,jdbcType=VARCHAR}
+		 </if>
+  	     ORDER BY tz_item.updated_time DESC
+  	
+  </select>
+  
+  <!-- 映射商品详情及商品分类名称信息 -->
+  <resultMap type="com.tz.pojo.vo.TzItemVo" id="queryItemDetailByIdMap">
+  	<id column="id" property="id" jdbcType="VARCHAR" />
+  	<result column="category_name" property="categoryName" jdbcType="VARCHAR"/>
+    <result column="item_title" property="itemTitle" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="price" property="price" jdbcType="DECIMAL" />
+    <result column="member_price" property="memberPrice" jdbcType="DECIMAL" />
+    <result column="category_id" property="categoryId" jdbcType="VARCHAR" />
+    <result column="image_url" property="imageUrl" jdbcType="VARCHAR" />
+    <result column="pricture_url" property="prictureUrl" jdbcType="VARCHAR" />
+    <result column="homepage_url" property="homepageUrl" jdbcType="VARCHAR" />
+    <result column="item_post" property="itemPost" jdbcType="DECIMAL" />
+    <result column="sales_num" property="salesNum" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <!-- 查询商品详情 -->
+ <select id="queryItemDetailById" resultMap="queryItemDetailByIdMap" parameterType="java.lang.String">
+	SELECT
+	i.id,
+	ca.`name` category_name,
+	i.category_id,
+	i.item_title,
+	i.description,
+	i.price,
+	i.member_price,
+	i.item_post,
+	i.homepage_url,
+	i.image_url,
+	i.pricture_url,
+	i.sales_num
+FROM
+	`tz_item` i
+INNER JOIN tz_item_category ca ON ca.id = i.category_id
+WHERE
+	i.id = #{id, jdbcType=VARCHAR}
+  </select>
+  
+  
+</mapper>

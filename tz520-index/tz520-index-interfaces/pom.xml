@@ -1,0 +1,19 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.tz520</groupId>
+    <artifactId>tz520</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+  <artifactId>tz520-index-interfaces</artifactId>
+  <version>${tz520-index-interfaces.version}</version>
+  <name>首页接口 实现rpc</name>
+  <description>首页接口 实现rpc</description>
+  <dependencies>
+  		<dependency>
+			<groupId>com.tz520</groupId>
+			<artifactId>tz520-common</artifactId>
+			<version>${tz520-common.version}</version>
+		</dependency>
+   </dependencies>
+</project>

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tz.mapper.vo.TzUserMapperVo" >
+  <resultMap id="BaseResultMap" type="com.tz.pojo.vo.UserVo" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="user_nick" property="userNick" jdbcType="VARCHAR" />
+    <result column="user_sex" property="userSex" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="head_url" property="headUrl" jdbcType="VARCHAR" />
+    <result column="is_member" property="isMember" jdbcType="INTEGER" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="last_upload" property="lastUpload" jdbcType="TIMESTAMP" />
+    <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="operater" property="operater" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="userMallId" property="userMallId" jdbcType="VARCHAR" />
+  </resultMap>
+  <select id="selectUserAndMailList" resultMap="BaseResultMap"  parameterType="java.util.HashMap" >
+	  SELECT
+		tz_user.id,
+		tz_user.user_name,
+		tz_user.user_nick,
+		tz_user.user_sex,
+		tz_user.phone,
+		tz_user.head_url,
+		tz_user.email,
+		tz_user.created_time,
+		tz_user.updated_time,
+		tz_user.last_upload,
+		tz_user.`status`,
+		tz_user_mall.type,
+		tz_user_mall.id as userMallId
+	FROM
+		tz_user
+	LEFT JOIN tz_user_mall ON (
+		tz_user_mall.user_id = tz_user.id
+	)
+	WHERE
+		tz_user_mall.mall_id = #{mallId,jdbcType=VARCHAR}
+		AND tz_user.status != 2
+		<if test ="id!= null">
+				AND tz_user_mall.user_id = #{id,jdbcType=VARCHAR}
+		</if>
+		<if test ="phone!= null">
+				AND tz_user.phone LIKE  #{phone,jdbcType=VARCHAR}
+		</if>
+		<if test ="userName!= null">
+				AND tz_user.user_name LIKE  #{userName,jdbcType=VARCHAR}
+		</if>
+	    <if test ="startTime!= null">
+				AND  tz_user.create_time between #{startTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
+		</if>
+		ORDER BY tz_user.created_time DESC
+  </select>
+</mapper>

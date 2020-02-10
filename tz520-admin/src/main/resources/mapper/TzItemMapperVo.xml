@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tz.mapper.vo.TzItemMapperVo" >
+  <resultMap id="BaseResultMap" type="com.tz.pojo.vo.TzItemVo" >
+     <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="category_name" property="categoryName" jdbcType="VARCHAR" />
+    <result column="item_title" property="itemTitle" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="price" property="price" jdbcType="DECIMAL" />
+    <result column="love_price" property="lovePrice" jdbcType="DECIMAL" />
+    <result column="member_price" property="memberPrice" jdbcType="DECIMAL" />
+    <result column="num" property="num" jdbcType="INTEGER" />
+    <result column="barcode" property="barcode" jdbcType="VARCHAR" />
+    <result column="category_id" property="categoryId" jdbcType="VARCHAR" />
+    <result column="image_url" property="imageUrl" jdbcType="VARCHAR" />
+    <result column="pricture_url" property="prictureUrl" jdbcType="VARCHAR" />
+    <result column="homepage_url" property="homepageUrl" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="operater" property="operater" jdbcType="VARCHAR" />
+    <result column="item_post" property="itemPost" jdbcType="DECIMAL" />
+    <result column="sales_num" property="salesNum" jdbcType="INTEGER" />
+    <result column="mall_id" property="mallId" jdbcType="VARCHAR" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+    
+  <sql id="Base_Column_List" >
+     id, item_title, description, price, love_price, member_price, num, barcode, category_id, 
+    image_url, pricture_url, homepage_url, status, operater, item_post, sales_num, mall_id, 
+    created_time, updated_time
+  </sql>
+  
+  <select id="selectTzItemList" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+		SELECT
+		  i.id,
+		  ca.`name` category_name,
+		  i.item_title,
+		  i.description,
+		  i.price,
+		  i.member_price,
+		  i.love_price,
+		  i.item_post,
+		  i.num,
+		  i.barcode,
+		  i.homepage_url,
+		  i.`status`,
+		  i.operater,
+		  i.sales_num,
+		  i.created_time,
+		  i.updated_time
+		  
+		FROM
+			`tz_item` i INNER JOIN tz_item_category ca on ca.id = i.category_id
+		<if test="mallId!=null">
+		     AND i.mall_id = #{mallId,jdbcType=VARCHAR}
+		</if>
+		<if test ="status!= null">
+				AND i.status = #{status,jdbcType=VARCHAR}
+		</if>
+		<if test ="categoryId!= null">
+				AND i.category_id = #{categoryId,jdbcType=VARCHAR}
+		</if>
+		<if test ="itemTitle!= null">
+				AND i.item_title LIKE  #{itemTitle,jdbcType=VARCHAR}
+		</if>
+		<if test ="description!= null">
+				AND i.description LIKE  #{description,jdbcType=VARCHAR}
+		</if>
+	    <if test ="startTime!= null">
+				AND  i.created_time between #{startTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
+		</if>
+		ORDER BY i.updated_time DESC
+  </select>
+  
+  <!-- 查询商品详情 -->
+  <select id="selectTzItemById" resultMap="BaseResultMap" parameterType="java.lang.String">
+ SELECT
+	  i.id,
+	  ca.`name` category_name,
+	  i.item_title,
+	  i.description,
+	  i.price,
+	  i.member_price,
+	  i.love_price,
+	  i.item_post,
+	  i.num,
+	  i.barcode,
+	  i.image_url,
+	  i.pricture_url,
+	  i.homepage_url,
+	  i.`status`,
+	  i.operater,
+	  i.mall_id,
+	  i.sales_num,
+	  i.category_id,
+	  i.created_time,
+	  i.updated_time
+	  
+	FROM
+		`tz_item` i,
+		(
+			SELECT
+				tz_item_category.id,
+				tz_item_category.`name`
+			FROM
+				tz_item_category
+		) ca
+	WHERE
+		ca.id = i.category_id
+	AND i.id=#{id,jdbcType=VARCHAR}
+  </select>
+  
+  <update id="deleteItem" parameterType="java.util.List" >
+    update tz_item
+    set status = 3  where id in 
+    <foreach item="id" index="index" collection="ids" open="(" separator="," close=")">
+		#{id}
+	</foreach>
+  </update>
+  
+  <update id="instockItem" parameterType="java.util.List" >
+    update tz_item
+    set status = 2  where id in 
+    <foreach collection="ids" index="index" item="id" open="(" separator="," close=")">
+       #{id}
+     </foreach>
+  </update>
+  <update id="reshelfItem" parameterType="java.util.List" >
+    update tz_item
+     set status = 1  where id in 
+    <foreach collection="ids" index="index" item="id" open="(" separator="," close=")">
+       #{id}
+     </foreach>
+  </update>
+  
+  
+</mapper>

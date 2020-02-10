@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tz.mapper.vo.TzItemCategoryMapperVo" >
+  <resultMap id="BaseResultMap" type="com.tz.pojo.vo.TzItemCategoryVo" >
+   <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="p_id" property="pId" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="logo_url" property="logoUrl" jdbcType="VARCHAR" />
+    <result column="link_address" property="linkAddress" jdbcType="VARCHAR" />
+    <result column="sort" property="sort" jdbcType="INTEGER" />
+    <result column="is_parent" property="isParent" jdbcType="BIT" />
+    <result column="operater" property="operater" jdbcType="VARCHAR" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, name,logo_url,link_address,sort, created_time, updated_time, operater
+  </sql>
+  
+  <!-- 异步加载商品分类名称 -->
+  <select id="queryAllItemCategory" resultMap="BaseResultMap">
+  	SELECT id,`name` FROM `tz_item_category`
+  </select>
+  
+  <!-- 校验分类sort是否存在 -->
+  <select id="checkItemCategorySort" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+  	SELECT COUNT(*) FROM `tz_item_category` where sort=#{sort}
+  </select>
+  
+  <!-- 商品分类列表信息查询 -->
+  <select id="selectItemCategoryList" resultMap="BaseResultMap" parameterType="java.util.HashMap" >
+    select 
+    <include refid="Base_Column_List" />
+    from tz_item_category
+    where 1=1
+    <if test="name!=null">
+    	and tz_item_category.name like #{name,jdbcType=VARCHAR}
+    </if>
+    <if test="startTime!= null">
+       and tz_item_category.created_time between #{startTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
+    </if>
+    ORDER BY tz_item_category.sort asc
+  </select>
+ 
+ <!-- 回显商品分类信息 -->
+  <select id="selectItemCategoryById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		  SELECT
+			tz_item_category.id,
+			tz_item_category.`name`,
+			tz_item_category.logo_url,
+			tz_item_category.link_address,
+			tz_item_category.sort  
+		FROM `tz_item_category`
+		WHERE
+			id = #{id,jdbcType=INTEGER}
+  </select>
+ 
+ 
+</mapper>

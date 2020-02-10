@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tz.mapper.vo.TzRoleMapperVo" >
+  <resultMap id="BaseResultMap" type="com.tz.pojo.TzRole" >
+   <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="p_id" property="pId" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="zindex" property="zindex" jdbcType="VARCHAR" />
+    <result column="operater" property="operater" jdbcType="VARCHAR" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+   <sql id="Base_Column_List" >
+    id, p_id, name, code, description, zindex, operater, created_time, updated_time
+  </sql>
+  
+  <resultMap type="java.lang.String" id="queryRoleCodeByManagerMap">
+  	<result column="code" property="code" jdbcType="VARCHAR" />
+  </resultMap>
+  <select id="queryRoleCodeByManager" resultMap="queryRoleCodeByManagerMap" parameterType="java.lang.String" >
+		SELECT
+			tz_role.`code`
+		FROM
+			tz_role
+		LEFT JOIN `tz_manager_role` ON tz_role.id = tz_manager_role.role_id
+		LEFT JOIN tz_manager on tz_manager_role.manager_id = tz_manager.id
+		WHERE
+			 tz_manager.id = #{id,jdbcType=VARCHAR}	
+  </select>
+  
+     <!-- 条件查询所有的角色信息 -->
+    <resultMap type="com.tz.pojo.vo.TzRoleVo" id="queryRoleListMap">
+         <id column="id" property="id" jdbcType="VARCHAR" />
+	    <result column="name" property="name" jdbcType="VARCHAR" />
+	    <result column="code" property="code" jdbcType="VARCHAR" />
+	    <result column="description" property="description" jdbcType="VARCHAR" />
+	    <result column="operater" property="operater" jdbcType="VARCHAR" />
+	    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+	    <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+	    
+	    <!-- 一个角色对应多个权限名称 -->
+	    <collection property="authFunctionList" ofType="com.tz.pojo.TzAuthFunction">
+	    	<result column="authFunctionName" property="name" jdbcType="VARCHAR" />
+	    </collection>
+    </resultMap>
+	   <select id="queryRoleList" resultMap="queryRoleListMap" parameterType="java.util.Map">
+		SELECT
+		tz_role.*, tz_auth_function.`name` authFunctionName
+		FROM
+		`tz_role`
+		LEFT JOIN tz_role_function ON tz_role.id = tz_role_function.role_id
+		LEFT JOIN tz_auth_function ON tz_role_function.function_id = tz_auth_function.id
+		where
+	     1=1
+	   <if test ="name!= null">
+				AND tz_role.name like  #{name,jdbcType=VARCHAR}
+		</if>
+	    <if test ="startTime!= null">
+				AND  tz_role.created_time between #{startTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
+		</if>
+		ORDER BY tz_role.created_time DESC
+	    
+   </select>
+  
+  <resultMap  type="com.tz.pojo.TzRole" id="queryAllRoleMap">
+      <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="p_id" property="pId" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="zindex" property="zindex" jdbcType="VARCHAR"/>
+  </resultMap>
+  
+  <select id="queryAllRole" resultMap="queryAllRoleMap">
+		  	SELECT
+			tz_role.id,
+			tz_role.`name`,
+			tz_role.p_id,
+			tz_role.zindex
+		FROM
+			`tz_role`	
+  </select>
+  
+</mapper>

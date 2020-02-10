@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tz.mapper.vo.TzManagerRoleMapperVo" >
+  <insert id="batchInsertData" parameterType="java.util.List" >
+    insert into tz_manager_role (id, manager_id, role_id, 
+      operater, created_time, updated_time)
+    values 
+     <foreach collection="managerRoleList" index="index" item="managerRole"   separator="," >
+      ( #{managerRole.id,jdbcType=VARCHAR}, #{managerRole.managerId,jdbcType=VARCHAR}, #{managerRole.roleId,jdbcType=VARCHAR}, 
+      #{managerRole.operater,jdbcType=VARCHAR},NOW(), NOW() )
+     </foreach>
+  </insert>
+  
+  
+</mapper>

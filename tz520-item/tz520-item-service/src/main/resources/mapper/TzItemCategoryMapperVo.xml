@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tz.mapper.vo.TzItemCategoryMapperVo" >
+  <resultMap id="BaseResultMap" type="com.tz.pojo.vo.TzItemCategoryVo" >
+   <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="logo_url" property="logoUrl" jdbcType="VARCHAR" />
+    <result column="link_address" property="linkAddress" jdbcType="VARCHAR" />
+    <result column="sort" property="sort" jdbcType="INTEGER" />
+  </resultMap>
+ 
+  
+  <select id="queryItemCategoryList" resultMap="BaseResultMap" >
+				SELECT
+					tz_item_category.id,
+					tz_item_category. name,
+					tz_item_category.logo_url,
+					tz_item_category.link_address,
+					tz_item_category.sort
+				FROM
+					tz_item_category
+				WHERE
+					sort IN (1, 2, 3, 4)
+				ORDER BY
+					sort ASC
+  </select>
+ 
+</mapper>

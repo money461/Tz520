@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tz.mapper.vo.TzRoleMapperVo" >
+  <resultMap id="BaseResultMap" type="com.tz.pojo.TzRole" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="operater" property="operater" jdbcType="VARCHAR" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+    <sql id="Base_Column_List" >
+    id, name, code, description, operater, created_time, updated_time
+  </sql>
+  <select id="findRoleByManagerId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+  SELECT 
+  <include refid="Base_Column_List" />
+  FROM `tz_role` r INNER JOIN 
+  (select role_id  from `tz_manager_role` where manager_id =#{id,jdbcType=VARCHAR} ) mr ON r.id = mr.role_id
+  </select>
+</mapper>

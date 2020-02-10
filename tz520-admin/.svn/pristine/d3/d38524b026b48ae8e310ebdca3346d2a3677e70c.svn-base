@@ -1,0 +1,20 @@
+server.port=9090
+logging.level.com.tz=debug
+server.context-path=/tzfile
+# \u4f7f\u7528druid\u6570\u636e\u6e90  
+druid.url=jdbc:mysql://116.62.174.247:3306/test
+druid.driver-class=com.mysql.jdbc.Driver
+druid.username=root
+druid.password=db123
+druid.initial-size=1
+druid.min-idle=1
+druid.max-active=20
+druid.test-on-borrow=true
+#\u662f\u5426\u66b4\u9732jmx\uff0c\u9ed8\u8ba4\u4e3atrue
+spring.jmx.enabled=false
+fdfs.soTimeout=1500
+fdfs.connectTimeout=600
+fdfs.thumbImage.width=150
+fdfs.thumbImage.height=150
+fdfs.trackerList[0]=120.55.43.176:22122
+#fdfs.trackerList[1]=192.168.0.202:22122

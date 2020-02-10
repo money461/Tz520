@@ -1,0 +1,204 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tz.mapper.vo.TzRecommendMapperVo" >
+  <resultMap id="BaseResultMap" type="com.tz.pojo.vo.RecommendVo" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="referee_id" property="refereeId" jdbcType="VARCHAR" />
+    <result column="grade" property="grade" jdbcType="INTEGER" />
+    <result column="real_id" property="realId" jdbcType="VARCHAR" />
+    <result column="isplay" property="isplay" jdbcType="INTEGER" />
+    <result column="feedback_status" property="feedbackStatus" jdbcType="INTEGER" />
+    <result column="feedback_fee" property="feedbackFee" jdbcType="INTEGER" />
+    <result column="feedback_time" property="feedbackTime" jdbcType="TIMESTAMP" />
+    <result column="mall_id" property="mallId" jdbcType="VARCHAR" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+    <result column="operater" property="operater" jdbcType="VARCHAR" />
+    <result column="top_two" property="topTwo" jdbcType="INTEGER" />
+    
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="referee_name" property="refereeName" jdbcType="VARCHAR" />
+    <result column="real_name" property="realName" jdbcType="VARCHAR" />
+    <result column="user_phone" property="userPhone" jdbcType="VARCHAR" />
+    <result column="referee_phone" property="refereePhone" jdbcType="VARCHAR" />
+    <result column="real_phone" property="realPhone" jdbcType="VARCHAR" />
+    <result column="pay_way" property="payWay" jdbcType="VARCHAR" />
+    <result column="pay_account" property="payAccount" jdbcType="VARCHAR" />
+  </resultMap>
+   <!-- 推荐用户信息 -->
+  <select id="selectRecommendList" resultMap="BaseResultMap"  parameterType="java.util.HashMap" >
+		 SELECT
+				tz_recommend.user_id,
+				userId.user_nick AS user_name,
+				insert(userId.phone, 4, 4, '****')AS user_phone, 
+				tz_recommend.referee_id,
+				refereeId.user_nick AS referee_name,
+				insert(refereeId.phone, 4, 4, '****')AS referee_phone,
+				CASE userMall.pay_way 
+			        WHEN '1' THEN '支付宝' 
+			        WHEN '2' THEN '微信'
+			        WHEN '3' THEN '网银'
+		        ELSE '后台开通' END AS pay_way,
+				userMall.pay_account,
+				tz_recommend.id,
+				tz_recommend.mall_id,
+				tz_recommend.top_two,
+				tz_recommend.grade,
+				tz_recommend.isplay,
+				tz_recommend.feedback_status,
+				tz_recommend.feedback_fee,
+				tz_recommend.feedback_time,
+				tz_recommend.created_time,
+				tz_recommend.updated_time,
+				tz_recommend.real_id,
+				insert((SELECT
+					tzUser.phone 
+				FROM
+					tz_user AS tzUser
+				WHERE
+					tzUser.id = tz_recommend.real_id), 4, 4, '****')AS real_phone,
+			(
+				SELECT
+					tzUser.user_nick 
+				FROM
+					tz_user AS tzUser
+				WHERE
+					tzUser.id = tz_recommend.real_id
+			)AS real_Name
+	FROM
+		`tz_recommend`
+		INNER JOIN tz_user AS userId ON userId.id = tz_recommend.user_id
+		INNER JOIN tz_user_mall AS userMall ON userId.id = userMall.user_id
+		LEFT JOIN tz_user AS refereeId ON refereeId.id = tz_recommend.real_id
+	WHERE
+		 tz_recommend.mall_id = #{mallId,jdbcType=VARCHAR}
+	<if test ="feedbackStatus!= null">
+		AND  tz_recommend.feedback_status =#{feedbackStatus,jdbcType=INTEGER}
+	</if>
+	<if test ="topTwo!= null">
+		AND  tz_recommend.top_two BETWEEN 1 AND 2
+	</if>
+	<if test ="grade!= null">
+		AND  tz_recommend.grade = #{grade,jdbcType=INTEGER}
+	</if>
+	<if test ="refereeId!= null">
+		AND tz_recommend.referee_id = #{refereeId,jdbcType=VARCHAR}
+	</if>
+	<if test ="phone!= null">
+			AND userId.phone LIKE  #{phone,jdbcType=VARCHAR}
+	</if>
+	<if test ="refereeName!= null">
+			AND userId.user_nick LIKE  #{refereeName,jdbcType=VARCHAR}
+	</if>
+	<if test ="refereePhone!= null">
+			AND refereeId.phone LIKE  #{refereePhone,jdbcType=VARCHAR}
+	</if>
+	<if test ="startTime!= null">
+		AND  tz_recommend.created_time between #{startTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
+	</if>
+	ORDER BY
+		tz_recommend.created_time DESC
+  </select>
+  <select id="countTopTwo" parameterType="java.util.HashMap" resultType="java.lang.Integer" >
+		 SELECT
+		SUM(
+			CASE
+			WHEN tz_recommend.top_two
+			AND tz_recommend.top_two  &gt;= 1
+			AND tz_recommend.top_two  &lt;= 2 THEN
+				1
+			ELSE
+				0
+			END
+		) AS top_two
+	FROM
+		`tz_recommend`
+	WHERE
+		tz_recommend.referee_id = #{refereeId,jdbcType=VARCHAR}
+  </select>
+  <!-- 推荐用户订单消费记录Map -->
+  <resultMap id="selectRecommendOrderConsumerListMap" type="com.tz.pojo.vo.RecommendOrderVo" >
+	<id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="shipping_code" property="shippingCode" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="payment" property="payment" jdbcType="DECIMAL" />
+    <result column="payment_type" property="paymentType" jdbcType="INTEGER" />
+    <result column="account" property="account" jdbcType="VARCHAR" />
+    <result column="love_value" property="loveValue" jdbcType="INTEGER" />
+    <result column="discount" property="discount" jdbcType="DECIMAL" />
+    <result column="discount_desc" property="discountDesc" jdbcType="VARCHAR" />
+    <result column="order_num" property="orderNum" jdbcType="INTEGER" />
+    <result column="post_fee" property="postFee" jdbcType="DECIMAL" />
+    <result column="mall_id" property="mallId" jdbcType="VARCHAR" />
+    <result column="buyer_nick" property="buyerNick" jdbcType="VARCHAR" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+    <result column="payment_time" property="paymentTime" jdbcType="TIMESTAMP" />
+    <result column="consign_time" property="consignTime" jdbcType="TIMESTAMP" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="close_time" property="closeTime" jdbcType="TIMESTAMP" />
+    <result column="operater" property="operater" jdbcType="VARCHAR" />
+    <result column="buyer_rate" property="buyerRate" jdbcType="INTEGER" />
+    <result column="buyer_message" property="buyerMessage" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="combo_num" property="comboNum" jdbcType="INTEGER" />
+    <result column="pay_single_item" property="paySingleItem" jdbcType="DECIMAL" />
+    <result column="pay_single_item_Total" property="paySingleItemTotal" jdbcType="INTEGER" />
+    
+    <result column="user_nick" property="userNick" jdbcType="VARCHAR" />
+    <result column="user_phone" property="userPhone" jdbcType="VARCHAR" />
+     
+  </resultMap>
+  <!-- 推荐用户订单消费记录 -->
+  <select id="selectRecommendOrderConsumerList" resultMap="selectRecommendOrderConsumerListMap"  parameterType="java.util.HashMap" >
+	  	SELECT
+		orderUser.user_nick AS user_nick,
+		INSERT (orderUser.phone, 4, 4, '****') AS user_phone,
+		tz_order.id,
+		tz_order.combo_num,
+		tz_order.pay_single_item,
+		tz_order.created_time,
+		tz_order.updated_time,
+		tz_order.payment_time
+		FROM
+			`tz_city_user_consumer`
+		INNER JOIN tz_user AS orderUser ON orderUser.id = tz_city_user_consumer.order_user_id
+		INNER JOIN tz_order ON tz_order.id = tz_city_user_consumer.order_id
+		WHERE
+			tz_city_user_consumer.user_id = #{refereeId,jdbcType=VARCHAR}
+			AND tz_order.pay_single_item > 0
+			AND tz_order.`status` > 1
+			<if test ="userNick!= null">
+				AND orderUser.user_nick LIKE  #{userNick,jdbcType=VARCHAR}
+			</if>
+			<if test ="startTime!= null">
+				AND  tz_order.created_time between #{startTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
+			</if>
+			ORDER BY tz_order.created_time DESC
+  </select>
+  <resultMap id="countRecommendOrderConsumerListMap" type="com.tz.pojo.vo.RecommendOrderVo" >
+		<id column="id" property="id" jdbcType="VARCHAR" />
+    	<result column="pay_single_item_Total" property="paySingleItemTotal" jdbcType="DECIMAL" />
+  </resultMap>
+  <select id="countRecommendOrderConsumerList" resultMap="countRecommendOrderConsumerListMap"  parameterType="java.util.HashMap" >
+	  	SELECT
+	 IFNULL(SUM(tz_order.pay_single_item),0) as pay_single_item_Total
+	FROM
+			`tz_city_user_consumer`
+		INNER JOIN tz_user AS orderUser ON orderUser.id = tz_city_user_consumer.order_user_id
+		INNER JOIN tz_order ON tz_order.id = tz_city_user_consumer.order_id
+	WHERE
+		tz_city_user_consumer.user_id = #{refereeId,jdbcType=VARCHAR}
+		AND tz_order.pay_single_item > 0
+		AND tz_order.`status` > 1
+		<if test ="userNick!= null">
+			AND orderUser.user_nick LIKE  #{userNick,jdbcType=VARCHAR}
+		</if>
+		<if test ="startTime!= null">
+			AND  tz_order.created_time between #{startTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
+		</if>
+		ORDER BY tz_order.created_time DESC
+  </select>
+</mapper>

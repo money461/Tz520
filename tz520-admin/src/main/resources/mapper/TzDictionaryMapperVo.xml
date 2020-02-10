@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tz.mapper.vo.TzDictionaryMapperVo" >
+  <resultMap id="BaseResultMap" type="com.tz.pojo.vo.TzDictionaryVo" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="VARCHAR" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="module" property="module" jdbcType="VARCHAR" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+    <result column="operater" property="operater" jdbcType="VARCHAR" />
+  </resultMap>
+   <sql id="Base_Column_List" >
+    id, type,code,name,module, created_time, updated_time, operater
+  </sql>
+  <select id="selectDictionaryList" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+	     select
+	    <include refid="Base_Column_List" />
+	    from tz_dictionary where 1=1
+	    
+	     <if test ="name!= null">
+				And tz_dictionary.name LIKE #{name,jdbcType=VARCHAR}
+		</if>
+	    <if test ="startTime!= null">
+				 And tz_dictionary.created_time between #{startTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
+		</if>
+		ORDER BY tz_dictionary.created_time DESC
+  </select>
+</mapper>

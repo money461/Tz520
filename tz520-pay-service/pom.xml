@@ -1,0 +1,52 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.tz520</groupId>
+    <artifactId>tz520</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+  <artifactId>tz520-pay-service</artifactId>
+  <version>${tz520-pay-service.version}</version>
+
+  <name>支付服务</name>
+  <description>支付服务</description>
+   <dependencies>
+  				<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+
+			<exclusions>
+				<exclusion>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-starter-tomcat</artifactId>
+				</exclusion>
+			</exclusions>
+
+		</dependency>
+		<!-- 打包tomcat jar -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.tz520</groupId>
+			<artifactId>tz520-pay-interfaces</artifactId>
+			<version>${tz520-pay-interfaces.version}</version>
+		</dependency>
+		
+   </dependencies>
+   <scm>
+       <url>https://github.com/wxpay/WXPay-SDK-Java</url>
+       <connection>git@github.com:wxpay/WXPay-SDK-Java.git</connection>
+       <developerConnection>https://github.com/wxpay/WXPay-SDK-Java</developerConnection>
+  	</scm>
+  	<developers>
+        <developer>
+            <name>wxpay</name>
+            <email>wxpay1888@foxmail.com</email>
+            <url>http://wxpay.github.io</url>
+        </developer>
+    </developers>
+  	<packaging>war</packaging>
+</project>

@@ -1,0 +1,433 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tz.mapper.TzItemMapper" >
+  <resultMap id="BaseResultMap" type="com.tz.pojo.TzItem" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="item_title" property="itemTitle" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="price" property="price" jdbcType="DECIMAL" />
+    <result column="love_price" property="lovePrice" jdbcType="DECIMAL" />
+    <result column="member_price" property="memberPrice" jdbcType="DECIMAL" />
+    <result column="num" property="num" jdbcType="INTEGER" />
+    <result column="barcode" property="barcode" jdbcType="VARCHAR" />
+    <result column="category_id" property="categoryId" jdbcType="VARCHAR" />
+    <result column="image_url" property="imageUrl" jdbcType="VARCHAR" />
+    <result column="pricture_url" property="prictureUrl" jdbcType="VARCHAR" />
+    <result column="homepage_url" property="homepageUrl" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="operater" property="operater" jdbcType="VARCHAR" />
+    <result column="item_post" property="itemPost" jdbcType="DECIMAL" />
+    <result column="sales_num" property="salesNum" jdbcType="INTEGER" />
+    <result column="mall_id" property="mallId" jdbcType="VARCHAR" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, item_title, description, price, love_price, member_price, num, barcode, category_id, 
+    image_url, pricture_url, homepage_url, status, operater, item_post, sales_num, mall_id, 
+    created_time, updated_time
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.tz.pojo.TzItemExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tz_item
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from tz_item
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from tz_item
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.tz.pojo.TzItemExample" >
+    delete from tz_item
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.tz.pojo.TzItem" >
+    insert into tz_item (id, item_title, description, 
+      price, love_price, member_price, 
+      num, barcode, category_id, 
+      image_url, pricture_url, homepage_url, 
+      status, operater, item_post, 
+      sales_num, mall_id, created_time, 
+      updated_time)
+    values (#{id,jdbcType=VARCHAR}, #{itemTitle,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
+      #{price,jdbcType=DECIMAL}, #{lovePrice,jdbcType=DECIMAL}, #{memberPrice,jdbcType=DECIMAL}, 
+      #{num,jdbcType=INTEGER}, #{barcode,jdbcType=VARCHAR}, #{categoryId,jdbcType=VARCHAR}, 
+      #{imageUrl,jdbcType=VARCHAR}, #{prictureUrl,jdbcType=VARCHAR}, #{homepageUrl,jdbcType=VARCHAR}, 
+      #{status,jdbcType=TINYINT}, #{operater,jdbcType=VARCHAR}, #{itemPost,jdbcType=DECIMAL}, 
+      #{salesNum,jdbcType=INTEGER}, #{mallId,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, 
+      #{updatedTime,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tz.pojo.TzItem" >
+    insert into tz_item
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="itemTitle != null" >
+        item_title,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="price != null" >
+        price,
+      </if>
+      <if test="lovePrice != null" >
+        love_price,
+      </if>
+      <if test="memberPrice != null" >
+        member_price,
+      </if>
+      <if test="num != null" >
+        num,
+      </if>
+      <if test="barcode != null" >
+        barcode,
+      </if>
+      <if test="categoryId != null" >
+        category_id,
+      </if>
+      <if test="imageUrl != null" >
+        image_url,
+      </if>
+      <if test="prictureUrl != null" >
+        pricture_url,
+      </if>
+      <if test="homepageUrl != null" >
+        homepage_url,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="operater != null" >
+        operater,
+      </if>
+      <if test="itemPost != null" >
+        item_post,
+      </if>
+      <if test="salesNum != null" >
+        sales_num,
+      </if>
+      <if test="mallId != null" >
+        mall_id,
+      </if>
+      <if test="createdTime != null" >
+        created_time,
+      </if>
+      <if test="updatedTime != null" >
+        updated_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="itemTitle != null" >
+        #{itemTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null" >
+        #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="lovePrice != null" >
+        #{lovePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="memberPrice != null" >
+        #{memberPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="num != null" >
+        #{num,jdbcType=INTEGER},
+      </if>
+      <if test="barcode != null" >
+        #{barcode,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryId != null" >
+        #{categoryId,jdbcType=VARCHAR},
+      </if>
+      <if test="imageUrl != null" >
+        #{imageUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="prictureUrl != null" >
+        #{prictureUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="homepageUrl != null" >
+        #{homepageUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+      <if test="operater != null" >
+        #{operater,jdbcType=VARCHAR},
+      </if>
+      <if test="itemPost != null" >
+        #{itemPost,jdbcType=DECIMAL},
+      </if>
+      <if test="salesNum != null" >
+        #{salesNum,jdbcType=INTEGER},
+      </if>
+      <if test="mallId != null" >
+        #{mallId,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null" >
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedTime != null" >
+        #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.tz.pojo.TzItemExample" resultType="java.lang.Integer" >
+    select count(*) from tz_item
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update tz_item
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.itemTitle != null" >
+        item_title = #{record.itemTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="record.description != null" >
+        description = #{record.description,jdbcType=VARCHAR},
+      </if>
+      <if test="record.price != null" >
+        price = #{record.price,jdbcType=DECIMAL},
+      </if>
+      <if test="record.lovePrice != null" >
+        love_price = #{record.lovePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.memberPrice != null" >
+        member_price = #{record.memberPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="record.num != null" >
+        num = #{record.num,jdbcType=INTEGER},
+      </if>
+      <if test="record.barcode != null" >
+        barcode = #{record.barcode,jdbcType=VARCHAR},
+      </if>
+      <if test="record.categoryId != null" >
+        category_id = #{record.categoryId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.imageUrl != null" >
+        image_url = #{record.imageUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.prictureUrl != null" >
+        pricture_url = #{record.prictureUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.homepageUrl != null" >
+        homepage_url = #{record.homepageUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=TINYINT},
+      </if>
+      <if test="record.operater != null" >
+        operater = #{record.operater,jdbcType=VARCHAR},
+      </if>
+      <if test="record.itemPost != null" >
+        item_post = #{record.itemPost,jdbcType=DECIMAL},
+      </if>
+      <if test="record.salesNum != null" >
+        sales_num = #{record.salesNum,jdbcType=INTEGER},
+      </if>
+      <if test="record.mallId != null" >
+        mall_id = #{record.mallId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdTime != null" >
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updatedTime != null" >
+        updated_time = #{record.updatedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update tz_item
+    set id = #{record.id,jdbcType=VARCHAR},
+      item_title = #{record.itemTitle,jdbcType=VARCHAR},
+      description = #{record.description,jdbcType=VARCHAR},
+      price = #{record.price,jdbcType=DECIMAL},
+      love_price = #{record.lovePrice,jdbcType=DECIMAL},
+      member_price = #{record.memberPrice,jdbcType=DECIMAL},
+      num = #{record.num,jdbcType=INTEGER},
+      barcode = #{record.barcode,jdbcType=VARCHAR},
+      category_id = #{record.categoryId,jdbcType=VARCHAR},
+      image_url = #{record.imageUrl,jdbcType=VARCHAR},
+      pricture_url = #{record.prictureUrl,jdbcType=VARCHAR},
+      homepage_url = #{record.homepageUrl,jdbcType=VARCHAR},
+      status = #{record.status,jdbcType=TINYINT},
+      operater = #{record.operater,jdbcType=VARCHAR},
+      item_post = #{record.itemPost,jdbcType=DECIMAL},
+      sales_num = #{record.salesNum,jdbcType=INTEGER},
+      mall_id = #{record.mallId,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      updated_time = #{record.updatedTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tz.pojo.TzItem" >
+    update tz_item
+    <set >
+      <if test="itemTitle != null" >
+        item_title = #{itemTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="price != null" >
+        price = #{price,jdbcType=DECIMAL},
+      </if>
+      <if test="lovePrice != null" >
+        love_price = #{lovePrice,jdbcType=DECIMAL},
+      </if>
+      <if test="memberPrice != null" >
+        member_price = #{memberPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="num != null" >
+        num = #{num,jdbcType=INTEGER},
+      </if>
+      <if test="barcode != null" >
+        barcode = #{barcode,jdbcType=VARCHAR},
+      </if>
+      <if test="categoryId != null" >
+        category_id = #{categoryId,jdbcType=VARCHAR},
+      </if>
+      <if test="imageUrl != null" >
+        image_url = #{imageUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="prictureUrl != null" >
+        pricture_url = #{prictureUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="homepageUrl != null" >
+        homepage_url = #{homepageUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=TINYINT},
+      </if>
+      <if test="operater != null" >
+        operater = #{operater,jdbcType=VARCHAR},
+      </if>
+      <if test="itemPost != null" >
+        item_post = #{itemPost,jdbcType=DECIMAL},
+      </if>
+      <if test="salesNum != null" >
+        sales_num = #{salesNum,jdbcType=INTEGER},
+      </if>
+      <if test="mallId != null" >
+        mall_id = #{mallId,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null" >
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedTime != null" >
+        updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tz.pojo.TzItem" >
+    update tz_item
+    set item_title = #{itemTitle,jdbcType=VARCHAR},
+      description = #{description,jdbcType=VARCHAR},
+      price = #{price,jdbcType=DECIMAL},
+      love_price = #{lovePrice,jdbcType=DECIMAL},
+      member_price = #{memberPrice,jdbcType=DECIMAL},
+      num = #{num,jdbcType=INTEGER},
+      barcode = #{barcode,jdbcType=VARCHAR},
+      category_id = #{categoryId,jdbcType=VARCHAR},
+      image_url = #{imageUrl,jdbcType=VARCHAR},
+      pricture_url = #{prictureUrl,jdbcType=VARCHAR},
+      homepage_url = #{homepageUrl,jdbcType=VARCHAR},
+      status = #{status,jdbcType=TINYINT},
+      operater = #{operater,jdbcType=VARCHAR},
+      item_post = #{itemPost,jdbcType=DECIMAL},
+      sales_num = #{salesNum,jdbcType=INTEGER},
+      mall_id = #{mallId,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      updated_time = #{updatedTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

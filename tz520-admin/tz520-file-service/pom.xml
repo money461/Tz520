@@ -1,0 +1,41 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>com.tz520</groupId>
+    <artifactId>tz520</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+  </parent>
+  <artifactId>tz520-file-service</artifactId>
+  <version>${tz520-file-service.version}</version>
+  <name>文件服务</name>
+  <description>文件服务</description>
+  <dependencies>
+  		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		<dependency>  
+	    <groupId>org.mortbay.jetty</groupId>  
+		    <artifactId>jetty</artifactId>  
+		    <version>6.1.26</version>  
+		</dependency>  
+		<!-- fastdfs -->
+		<dependency>
+	    <groupId>com.github.tobato</groupId>
+		    <artifactId>fastdfs-client</artifactId>
+		    <version>1.25.2-RELEASE</version>
+		</dependency>
+		<!--hessian -->
+		<!-- https://mvnrepository.com/artifact/com.caucho/hessian -->
+		<dependency>
+		    <groupId>com.caucho</groupId>
+		    <artifactId>hessian</artifactId>
+		    <version>4.0.7</version>
+		</dependency>
+		<dependency>
+			<groupId>com.tz520</groupId>
+			<artifactId>tz520-file-interfaces</artifactId>
+			<version>${tz520-file-interfaces.version}</version>
+		</dependency>
+   </dependencies>
+</project>

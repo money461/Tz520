@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tz.mapper.vo.TzAuthFunctionMapperVo" >
+  <resultMap id="BaseResultMap" type="com.tz.pojo.TzAuthFunction" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="page" property="page" jdbcType="VARCHAR" />
+    <result column="generatemenu" property="generatemenu" jdbcType="VARCHAR" />
+    <result column="zindex" property="zindex" jdbcType="CHAR" />
+    <result column="pid" property="pid" jdbcType="VARCHAR" />
+    <result column="operater" property="operater" jdbcType="VARCHAR" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+    <sql id="Base_Column_List" >
+    id, name, code, description, page, generatemenu, zindex, p_id, operater, created_time, 
+    updated_time
+  </sql>
+  <select id="findAuthFunctionByManagerId" resultMap="BaseResultMap" parameterType="java.lang.String" >
+  select <include refid="Base_Column_List" />
+   from tz_auth_function af,(select function_id fid from tz_role_function ,(select role_id id from tz_manager_role where manager_id=#{id,jdbcType=VARCHAR}) mr where role_id=mr.id) rf where id=rf.fid
+  </select>
+</mapper>

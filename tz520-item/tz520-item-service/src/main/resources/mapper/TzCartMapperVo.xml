@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tz.mapper.vo.TzCartMapperVo" >
+  <resultMap id="BaseResultMap" type="com.tz.pojo.TzCart" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="item_id" property="itemId" jdbcType="VARCHAR" />
+    <result column="num" property="num" jdbcType="INTEGER" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+ 
+  <sql id="Base_Column_List" >
+    id, user_id, item_id, num, created_time, updated_time
+  </sql>
+  
+  <!-- 查询该用户购物车中否存在该商品信息 -->
+    <select id="selectCartByItemId" resultMap="BaseResultMap" >
+			 SELECT
+				*
+			FROM
+				tz_cart
+			WHERE
+				tz_cart.user_id = #{userId,jdbcType=VARCHAR}
+			AND  
+			    tz_cart.item_id = #{itemId,jdbcType=VARCHAR}
+    </select>
+  
+  <!-- 批量删除购物车某一商品信息 -->
+  <delete id="deleteCartByItemId">
+  	 		DELETE
+			FROM
+				tz_cart
+			WHERE
+				tz_cart.user_id = #{userId,jdbcType=VARCHAR}
+
+			AND  tz_cart.item_id in
+			<foreach collection="ids"  open="(" separator="," close=")" item="id" index="index">
+					#{id}
+			</foreach>
+  </delete>
+  
+  <!-- 根据用户分类展示购物车信息 -->
+  <resultMap type="com.tz.pojo.vo.TzCategoryCart" id="queryCartByUserIdMap">
+       <!-- 类目与商品一对一 -->
+    <id column="category_id" property="id" jdbcType="INTEGER" />
+    <result column="category_name" property="name" jdbcType="VARCHAR" />
+    
+      <!-- 一对多 -->
+   <collection property="cartList" ofType="com.tz.pojo.vo.TzCartVo">
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="item_id" property="itemId" jdbcType="VARCHAR" />
+    <result column="item_title" property="itemTitle" jdbcType="VARCHAR" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="homepage_url" property="homepageUrl" jdbcType="VARCHAR" />
+    <result column="num" property="num" jdbcType="INTEGER" />
+    <result column="price" property="price" jdbcType="DECIMAL" />
+    <result column="member_price" property="memberPrice" jdbcType="DECIMAL" />
+     <result column="love_price" property="lovePrice" jdbcType="DECIMAL" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+   </collection>
+  </resultMap>
+  
+  <select id="selectCartListByUserId" resultMap="queryCartByUserIdMap" parameterType="java.lang.String" >
+						SELECT
+						    tz_cart.id,
+							tz_item_category.id category_id,
+							tz_item_category.`name` category_name,
+							tz_cart.user_id,
+							tz_cart.item_id,
+							tz_cart.num,
+							tz_item.item_title,
+							tz_item.description,
+							tz_item.homepage_url,
+							tz_item.price,
+							tz_item.member_price,
+							tz_item.love_price,
+							tz_item.`status`
+						FROM
+							tz_cart
+						INNER JOIN tz_item ON tz_item.id = tz_cart.item_id
+						INNER JOIN tz_item_category ON tz_item.category_id = tz_item_category.id
+						WHERE
+							user_id = #{userId,jdbcType=VARCHAR}
+						ORDER BY
+							tz_cart.created_time DESC		 
+     </select>
+  
+  <select id="queryUserType" resultType="java.lang.Integer" parameterType="java.lang.String">
+    SELECT type FROM `tz_user_mall` WHERE user_id= #{userId,jdbcType=VARCHAR}
+  </select>
+  
+  
+</mapper>

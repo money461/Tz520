@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tz.mapper.vo.TzExpressComMapperVo" >
+  <resultMap id="BaseResultMap" type="com.tz.pojo.vo.TzExpressComVo" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="com" property="com" jdbcType="VARCHAR" />
+    <result column="company_name" property="companyName" jdbcType="VARCHAR" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <select id="getExpressComList" resultMap="BaseResultMap" parameterType="java.util.Map">
+       SELECT
+			*
+		FROM
+			`tz_express_com`
+			where 1=1
+			<if test="name">
+				AND tz_express_com.company_name like #{name,jdbcType=VARCHAR}
+			</if>
+			<if test ="startTime!= null">
+			AND  tz_express_com.created_time between #{startTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
+		   </if>
+		   ORDER BY
+				tz_express_com.created_time desc
+  </select>
+</mapper>

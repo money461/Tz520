@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tz.mapper.vo.TzUserMapperVo" >
+  <resultMap id="selectUserAndMailInnerMap" type="com.tz.pojo.vo.UserVo2" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+  </resultMap>
+  <select id="selectUserAndMailInner" resultMap="selectUserAndMailInnerMap"  parameterType="java.util.HashMap" >
+	  SELECT
+			tz_user.id,
+			tz_user.`status`,
+			tz_user_mall.type
+		FROM
+			tz_user
+			INNER JOIN  tz_user_mall ON (
+			tz_user_mall.user_id = tz_user.id
+		)
+		WHERE
+			tz_user_mall.mall_id = #{mallId,jdbcType=VARCHAR}
+			AND tz_user.id = #{userId,jdbcType=VARCHAR}
+  </select>
+</mapper>

@@ -1,0 +1,300 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>com.tz520</groupId>
+  <artifactId>tz520</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>pom</packaging>
+  <name>tz520父项目</name>
+  <description>tz520父项目</description>
+   <!-- 添加父依赖 -->
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>1.5.3.RELEASE</version>
+    </parent>
+    <properties>
+    	<!-- common -->
+    	<tz520-admin.version>1.0.0</tz520-admin.version>
+		<tz520-common.version>1.0.0</tz520-common.version>
+		<tz520-file-service.version>1.0.0</tz520-file-service.version>
+		<tz520-pay-service.version>1.0.0</tz520-pay-service.version>
+		<tz520-pay-interfaces.version>1.0.0</tz520-pay-interfaces.version>
+		
+		<!-- interfaces -->
+		<tz520-file-interfaces.version>1.0.0</tz520-file-interfaces.version>
+		<tz520-index-interfaces.version>1.0.0</tz520-index-interfaces.version>
+		<tz520-order-interfaces.version>1.0.0</tz520-order-interfaces.version>
+		<tz520-recommend-interfaces.version>1.0.0</tz520-recommend-interfaces.version>
+		<tz520-user-interfaces.version>1.0.0</tz520-user-interfaces.version>
+		<tz520-item-interfaces.version>1.0.0</tz520-item-interfaces.version>
+		
+		<!-- service -->
+		<tz520-index-service.version>1.0.0</tz520-index-service.version>
+		<tz520-order-service.version>1.0.0</tz520-order-service.version>
+		<tz520-recommend-service.version>1.0.0</tz520-recommend-service.version>
+		<tz520-user-service.version>1.0.0</tz520-user-service.version>
+		<tz520-item-service.version>1.0.0</tz520-item-service.version>
+		
+		<!-- web -->
+		<tz520-index-web.version>1.0.0</tz520-index-web.version>
+		<tz520-order-web.version>1.0.0</tz520-order-web.version>
+		<tz520-recommend-web.version>1.0.0</tz520-recommend-web.version>
+		<tz520-user-web.version>1.0.0</tz520-user-web.version>	
+		<tz520-item-web.version>1.0.0</tz520-item-web.version>	
+		
+        <spring-boot.version>1.5.7.RELEASE</spring-boot.version>
+        <java.version>1.7</java.version>
+        <mybatis.spring.version>1.2.4</mybatis.spring.version>
+    </properties>
+  <dependencies>
+ 		<!--common start -->
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>18.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.commons</groupId>
+			<artifactId>commons-lang3</artifactId>
+			<version>3.3.2</version>
+		</dependency>
+		<dependency>
+			<groupId>log4j</groupId>
+			<artifactId>log4j</artifactId>
+			<version>1.2.17</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.5</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-log4j12</artifactId>
+			<version>1.7.5</version>
+		</dependency>
+		<dependency>
+			<groupId>commons-io</groupId>
+			<artifactId>commons-io</artifactId>
+			<version>2.4</version>
+		</dependency>
+
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+			<version>4.12</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-collections</groupId>
+			<artifactId>commons-collections</artifactId>
+			<version>3.2.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.quartz-scheduler</groupId>
+			<artifactId>quartz</artifactId>
+			<version>1.8.5</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>fastjson</artifactId>
+			<version>1.2.8</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.datatype</groupId>
+			<artifactId>jackson-datatype-joda</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.module</groupId>
+			<artifactId>jackson-module-parameter-names</artifactId>
+		</dependency>
+<!-- 		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>4.2.0.Final</version>
+		</dependency> -->
+		<!-- mysql -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>druid</artifactId>
+			<version>1.0.11</version>
+		</dependency>
+		 <!--mybatis -->
+		<dependency>
+			<groupId>org.mybatis.spring.boot</groupId>
+			<artifactId>mybatis-spring-boot-starter</artifactId>
+			<version>1.2.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.httpcomponents</groupId>
+			<artifactId>httpclient</artifactId>
+			<version>4.5</version>
+		</dependency>
+
+		<dependency>
+			<groupId>javax.mail</groupId>
+			<artifactId>mail</artifactId>
+			<version>1.4.7</version>
+		</dependency>
+		<!--common end -->
+		<!--active mq start-->
+		<dependency>
+			<groupId>org.apache.activemq</groupId>
+			<artifactId>activemq-core</artifactId>
+			<version>5.7.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.activemq</groupId>
+			<artifactId>activemq-pool</artifactId>
+			<version>5.13.3</version>
+		</dependency>
+		<!--active mq end-->
+		 <!-- shiro spring. -->
+        <dependency>  
+            <groupId>org.apache.shiro</groupId>  
+            <artifactId>shiro-core</artifactId>  
+            <version>1.2.2</version>  
+        </dependency> 
+       <dependency>
+           <groupId>org.apache.shiro</groupId>
+           <artifactId>shiro-spring</artifactId>
+           <version>1.2.2</version>
+       </dependency>
+        <!-- shiro ehcache -->
+       <dependency>
+           <groupId>org.apache.shiro</groupId>
+           <artifactId>shiro-ehcache</artifactId>
+           <version>1.2.2</version>
+       </dependency>
+		 <!-- freemarker + shiro（标签）-->
+		<dependency>
+		    <groupId>net.mingsoft</groupId>
+		    <artifactId>shiro-freemarker-tags</artifactId>
+		    <version>0.1</version>
+		</dependency>
+		<!-- 短信接口 -->
+		<dependency>
+			<groupId>com.alibaba.taobao</groupId>
+			<artifactId>aliyun-java-sdk-dysmsapi</artifactId>
+			<version>1.0.0-SANPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.alibaba.taobao</groupId>
+			<artifactId>aliyun-java-sdk-core</artifactId>
+			<version>3.2.3</version>
+		</dependency>
+		<!-- 支付宝支付接口 -->
+		<dependency>
+			<groupId>com.alibaba.taobao</groupId>
+			<artifactId>alipay-sdk</artifactId>
+			<version>java20171026141113-source</version>
+		</dependency>
+		<dependency>
+			<groupId>com.alibaba.taobao</groupId>
+			<artifactId>alipay-sdk-java</artifactId>
+			<version>20171026141113</version>
+		</dependency>
+		<!-- https://mvnrepository.com/artifact/redis.clients/jedis -->
+		<dependency>
+		    <groupId>redis.clients</groupId>
+		    <artifactId>jedis</artifactId>
+		    <version>2.9.0</version>
+		</dependency>
+		<dependency>
+		   <groupId>org.springframework.boot</groupId>
+		   <artifactId>spring-boot-starter-redis</artifactId>
+		   <version>1.4.7.RELEASE</version>
+		</dependency>
+		<dependency>
+			<groupId>com.dyuproject.protostuff</groupId>
+			<artifactId>protostuff-core</artifactId>
+			<version>1.0.8</version>
+		</dependency>
+		<dependency>
+			<groupId>com.dyuproject.protostuff</groupId>
+			<artifactId>protostuff-runtime</artifactId>
+			<version>1.0.8</version>
+		</dependency>
+		<!--pagehelper -->
+		<dependency>
+			<groupId>com.github.pagehelper</groupId>
+			<artifactId>pagehelper-spring-boot-starter</artifactId>
+			<version>1.1.0</version>
+		</dependency>
+		<dependency>  
+            <groupId>com.google.zxing</groupId>  
+            <artifactId>core</artifactId>  
+            <version>3.0.0</version>  
+        </dependency>  
+        <dependency>  
+            <groupId>com.google.zxing</groupId>  
+            <artifactId>javase</artifactId>  
+            <version>3.0.0</version>  
+        </dependency>
+		<!--  -->
+		<dependency>
+			<groupId>com.alibaba</groupId>
+			<artifactId>dubbo</artifactId>
+			<version>2.8.4</version>
+		</dependency>
+		<dependency>
+			<groupId>com.101tec</groupId>
+			<artifactId>zkclient</artifactId>
+			<version>0.9</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.zookeeper</groupId>
+			<artifactId>zookeeper</artifactId>
+			<version>3.4.6</version>
+			<exclusions>
+				<exclusion>
+					<groupId>org.slf4j</groupId>
+					<artifactId>slf4j-log4j12</artifactId>
+				</exclusion>
+				<exclusion>
+					<groupId>log4j</groupId>
+					<artifactId>log4j</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+		
+		  <!--shiro+ehcache缓存  -->
+		<dependency>
+			<groupId>org.apache.shiro</groupId>
+			<artifactId>shiro-ehcache</artifactId>
+			<version>1.3.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-context-support</artifactId>
+			<version>4.3.7.RELEASE</version>
+		</dependency>
+		<!-- 定时器任务 quartz需要导入的坐标 -->
+        <dependency>
+            <groupId>org.quartz-scheduler</groupId>
+            <artifactId>quartz</artifactId>
+            <version>1.8.5</version>
+        </dependency>
+        
+        <!-- java实现excel的导入导出 -->
+        <dependency>
+            <groupId>org.apache.poi</groupId>
+            <artifactId>poi-ooxml</artifactId>
+            <version>3.10-FINAL</version>
+        </dependency>
+  </dependencies>  
+</project>

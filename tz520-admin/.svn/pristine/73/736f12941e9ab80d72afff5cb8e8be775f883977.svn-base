@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tz.mapper.vo.TzContentCategoryMapperVo" >
+  <resultMap id="BaseResultMap" type="com.tz.pojo.vo.TzContentCategoryVo" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="p_id" property="pId" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="logo_url" property="logoUrl" jdbcType="VARCHAR" />
+    <result column="link_address" property="linkAddress" jdbcType="VARCHAR" />
+    <result column="sort" property="sort" jdbcType="INTEGER" />
+    <result column="is_parent" property="isParent" jdbcType="BIT" />
+    <result column="operater" property="operater" jdbcType="VARCHAR" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+   id, p_id, name, logo_url, link_address, sort, is_parent, operater, created_time, 
+    updated_time
+  </sql>
+  <!--异步加载说有的内容分类信息  -->
+  <select id="queryContentCatagory" resultMap="BaseResultMap">
+		  SELECT
+			tz_content_category.id,
+			tz_content_category.`name`
+		FROM
+			`tz_content_category`
+  </select>
+  
+  <!-- 校验sort是否存在 -->
+  <select id="checkContentCategorySort" resultType="java.lang.Integer" parameterType="java.lang.Integer">
+  	SELECT COUNT(*) FROM `tz_content_category` where sort=#{sort}
+  </select>
+  
+  <!-- 内容分类回显 -->
+  <select id="selectContentCategoryById" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+     SELECT
+			tz_content_category.id,
+			tz_content_category.`name`,
+			tz_content_category.`logo_url`,
+			tz_content_category.`link_address`,
+			tz_content_category.`sort`
+		FROM
+			`tz_content_category`
+	    where 
+	         tz_content_category.id=#{id,jdbcType=INTEGER}
+  	
+  </select>
+  
+  <!-- 内容分类列表信息 -->
+  <select id="getContentCategoryList" resultMap="BaseResultMap" parameterType="java.util.Map">
+       SELECT
+			tz_content_category.id,
+			tz_content_category.`name`,
+			tz_content_category.`logo_url`,
+			tz_content_category.`link_address`,
+			tz_content_category.`sort`,
+			tz_content_category.operater,
+			tz_content_category.created_time,
+			tz_content_category.updated_time
+		FROM
+			`tz_content_category`
+			where 1=1
+			<if test="name!=null">
+				AND tz_content_category.name like #{name,jdbcType=VARCHAR}
+			</if>
+			<if test ="startTime!= null">
+			AND  tz_content_category.created_time between #{startTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
+		   </if>
+		   ORDER BY
+				tz_content_category.sort ASC
+  </select>
+  
+</mapper>

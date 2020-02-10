@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tz.mapper.vo.TzReceiverinfoMapperVo" >
+  <resultMap id="BaseResultMap" type="com.tz.pojo.TzReceiverinfo" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="receiver_name" property="receiverName" jdbcType="VARCHAR" />
+    <result column="receiver_phone" property="receiverPhone" jdbcType="VARCHAR" />
+    <result column="receiver_mobile" property="receiverMobile" jdbcType="VARCHAR" />
+    <result column="receiver_state" property="receiverState" jdbcType="VARCHAR" />
+    <result column="receiver_city" property="receiverCity" jdbcType="VARCHAR" />
+    <result column="receiver_district" property="receiverDistrict" jdbcType="VARCHAR" />
+    <result column="receiver_address" property="receiverAddress" jdbcType="VARCHAR" />
+    <result column="is_default" property="isDefault" jdbcType="INTEGER" />
+    <result column="receiver_zip" property="receiverZip" jdbcType="VARCHAR" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  
+  <sql id="Base_Column_List" >
+    id, user_id, receiver_name, receiver_phone, receiver_mobile, receiver_state, receiver_city, 
+    receiver_district, receiver_address, is_default, receiver_zip, created_time, updated_time
+  </sql>
+  
+  <!-- 清空收货人地址默认字段标识 -->
+  <delete id="deleteISDefault" parameterType="java.lang.String" >
+	UPDATE tz_receiverinfo
+	SET is_default =0
+	WHERE
+	user_id = #{userId,jdbcType=VARCHAR}
+  </delete>
+  
+  <!-- 查询该用户收货地址信息 limit 保证了非默认地址按照更新时间顺序展示 -->
+  <select id="selectReceiverInfoByUserId"  resultMap="BaseResultMap"  parameterType="java.lang.String">
+			(
+			SELECT
+				tz_receiverinfo.id,
+				tz_receiverinfo.user_id,
+				tz_receiverinfo.receiver_name,
+				tz_receiverinfo.receiver_mobile,
+				tz_receiverinfo.receiver_state,
+				tz_receiverinfo.receiver_city,
+				tz_receiverinfo.receiver_district,
+				tz_receiverinfo.receiver_address,
+				tz_receiverinfo.is_default
+			FROM
+				tz_receiverinfo
+			WHERE
+				tz_receiverinfo.user_id = #{userId,jdbcType=VARCHAR}
+			AND is_default = 1
+		)
+		UNION ALL
+			(
+				SELECT
+					tz_receiverinfo.id,
+					tz_receiverinfo.user_id,
+					tz_receiverinfo.receiver_name,
+					tz_receiverinfo.receiver_mobile,
+					tz_receiverinfo.receiver_state,
+					tz_receiverinfo.receiver_city,
+					tz_receiverinfo.receiver_district,
+					tz_receiverinfo.receiver_address,
+					tz_receiverinfo.is_default
+				FROM
+					`tz_receiverinfo`
+				WHERE
+					tz_receiverinfo.user_id = #{userId,jdbcType=VARCHAR}
+				AND tz_receiverinfo.is_default =0
+				ORDER BY
+					tz_receiverinfo.updated_time DESC
+				LIMIT 10
+			)
+  </select>
+  
+</mapper>

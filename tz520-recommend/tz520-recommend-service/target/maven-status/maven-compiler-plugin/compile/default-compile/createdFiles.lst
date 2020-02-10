@@ -1,0 +1,12 @@
+com\tz\mapper\vo\TzUserLoveConsumptionDetailsMapperVo.class
+com\tz\serviceImpl\RecommendServiceImpl.class
+com\tz\mapper\TzUserLoveMapper.class
+com\tz\druid\DruidAutoConfiguration.class
+com\tz\Application.class
+com\tz\druid\DruidConfig.class
+com\tz\mapper\TzUserMapper.class
+com\tz\pojo\vo\CommonVo.class
+com\tz\mapper\TzZfbUserInfoMapper.class
+com\tz\mapper\TzUserLoveShowMapper.class
+com\tz\mapper\TzUserLoveConsumptionDetailsMapper.class
+com\tz\mapper\TzRecommendMapper.class

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tz.mapper.vo.TzUserLoveMapperVo" >
+  <resultMap id="BaseResultMap" type="com.tz.pojo.vo.UserLoveVo" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="love_total" property="loveTotal" jdbcType="INTEGER" />
+    <result column="love_surplus" property="loveSurplus" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+    <result column="last_updated_time" property="lastUpdatedTime" jdbcType="TIMESTAMP" />
+    <result column="operater" property="operater" jdbcType="VARCHAR" />
+    
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="user_nick" property="userNick" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+  </resultMap>
+  <select id="selectLoveAndUserList" resultMap="BaseResultMap"  parameterType="java.util.HashMap" >
+	  SELECT
+		ul.id,
+		u.user_name,
+		u.user_nick,
+		u.phone,
+		ul.love_total,
+		ul.love_surplus,
+		ul.created_time,
+		ul.updated_time,
+		ul.`status`,
+		ul.last_updated_time
+	FROM
+		`tz_user_love` AS ul
+	INNER JOIN tz_user AS u ON ul.user_id = u.id
+	WHERE
+		1=1
+	 <if test ="phone!= null">
+		AND u.phone LIKE  #{phone,jdbcType=VARCHAR}
+	 </if>
+	 <if test ="userName!=null">
+		AND u.user_name LIKE  #{userName,jdbcType=VARCHAR}
+	 </if>
+	 <if test ="status!= null">
+		AND ul.status  = #{status,jdbcType=VARCHAR}
+	 </if>
+	 <if test ="startTime!= null">
+		AND  ul.created_time between #{startTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
+	 </if>
+		ORDER BY ul.created_time DESC
+  </select>
+
+</mapper>

@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tz.mapper.vo.TzOrderMapperVo" >
+  <resultMap id="BaseResultMap" type="com.tz.pojo.vo.TzOrderVo" >
+	   <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="shipping_code" property="shippingCode" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="payment" property="payment" jdbcType="DECIMAL" />
+    <result column="payment_type" property="paymentType" jdbcType="INTEGER" />
+    <result column="account" property="account" jdbcType="VARCHAR" />
+    <result column="love_value" property="loveValue" jdbcType="INTEGER" />
+    <result column="discount" property="discount" jdbcType="DECIMAL" />
+    <result column="discount_desc" property="discountDesc" jdbcType="VARCHAR" />
+    <result column="order_num" property="orderNum" jdbcType="INTEGER" />
+    <result column="post_fee" property="postFee" jdbcType="DECIMAL" />
+    <result column="mall_id" property="mallId" jdbcType="VARCHAR" />
+    <result column="buyer_nick" property="buyerNick" jdbcType="VARCHAR" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+    <result column="payment_time" property="paymentTime" jdbcType="TIMESTAMP" />
+    <result column="consign_time" property="consignTime" jdbcType="TIMESTAMP" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="close_time" property="closeTime" jdbcType="TIMESTAMP" />
+    <result column="operater" property="operater" jdbcType="VARCHAR" />
+    <result column="buyer_rate" property="buyerRate" jdbcType="INTEGER" />
+    <result column="buyer_message" property="buyerMessage" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="combo_num" property="comboNum" jdbcType="INTEGER" />
+  </resultMap>
+   <sql id="Base_Column_List" >
+         id, user_id, shipping_code, status, payment, payment_type, account, love_value, discount, 
+    discount_desc, order_num, post_fee, mall_id, buyer_nick, created_time, updated_time, 
+    payment_time, consign_time, end_time, close_time, operater, buyer_rate, buyer_message, 
+    type, combo_num
+  </sql>
+  <select id="selectOrderList" resultMap="BaseResultMap" parameterType="java.util.HashMap">
+	     select
+	    <include refid="Base_Column_List" />
+	    from tz_order  where
+	     tz_order.mall_id = #{mallId,jdbcType=VARCHAR}
+	     <if test ="status!= null">
+				AND tz_order.status = #{status,jdbcType=VARCHAR}
+		</if>
+		<if test ="id!= null">
+				AND tz_order.id LIKE  #{id,jdbcType=VARCHAR}
+		</if>
+	    <if test ="startTime!= null">
+				AND  tz_order.created_time between #{startTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
+		</if>
+		ORDER BY tz_order.created_time DESC
+  </select>
+  
+   
+  <resultMap id="orderDetailMap" type="com.tz.pojo.vo.TzOrderVo">
+	  <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="shipping_code" property="shippingCode" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="payment" property="payment" jdbcType="DECIMAL" />
+    <result column="payment_type" property="paymentType" jdbcType="INTEGER" />
+    <result column="account" property="account" jdbcType="VARCHAR" />
+    <result column="love_value" property="loveValue" jdbcType="INTEGER" />
+    <result column="discount" property="discount" jdbcType="DECIMAL" />
+    <result column="discount_desc" property="discountDesc" jdbcType="VARCHAR" />
+    <result column="order_num" property="orderNum" jdbcType="INTEGER" />
+    <result column="post_fee" property="postFee" jdbcType="DECIMAL" />
+    <result column="mall_id" property="mallId" jdbcType="VARCHAR" />
+    <result column="buyer_nick" property="buyerNick" jdbcType="VARCHAR" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+    <result column="payment_time" property="paymentTime" jdbcType="TIMESTAMP" />
+    <result column="consign_time" property="consignTime" jdbcType="TIMESTAMP" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="close_time" property="closeTime" jdbcType="TIMESTAMP" />
+    <result column="operater" property="operater" jdbcType="VARCHAR" />
+    <result column="buyer_rate" property="buyerRate" jdbcType="INTEGER" />
+    <result column="buyer_message" property="buyerMessage" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="combo_num" property="comboNum" jdbcType="INTEGER" />
+    
+    <!-- 订单与物流信息一对一映射关系 -->
+    <association property="orderShipping" javaType="com.tz.pojo.TzOrderShipping">
+	   <id column="os_oid" property="orderId" jdbcType="VARCHAR" />
+    <result column="shipping_code" property="shippingCode" jdbcType="VARCHAR" />
+    <result column="last_info" property="lastInfo" jdbcType="VARCHAR" />
+    <result column="receiver_name" property="receiverName" jdbcType="VARCHAR" />
+    <result column="receiver_phone" property="receiverPhone" jdbcType="VARCHAR" />
+    <result column="receiver_mobile" property="receiverMobile" jdbcType="VARCHAR" />
+    <result column="receiver_state" property="receiverState" jdbcType="VARCHAR" />
+    <result column="receiver_city" property="receiverCity" jdbcType="VARCHAR" />
+    <result column="receiver_district" property="receiverDistrict" jdbcType="VARCHAR" />
+    <result column="receiver_address" property="receiverAddress" jdbcType="VARCHAR" />
+    <result column="receiver_zip" property="receiverZip" jdbcType="VARCHAR" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+    <result column="operater" property="operater" jdbcType="VARCHAR" />
+    </association>
+    
+    <!-- 订单id与订单商品表一对多映射关系 -->
+    <collection property="orderItems" ofType="com.tz.pojo.vo.TzOrderItemVo" >
+		<id column="oi_id" property="id" jdbcType="VARCHAR" />
+		<result column="oi_oid" property="orderId" jdbcType="VARCHAR" />
+		<result column="item_id" property="itemId" jdbcType="VARCHAR" />
+		<result column="num" property="num" jdbcType="INTEGER" />
+		<result column="item_title" property="itemTitle" jdbcType="VARCHAR" />
+		<result column="price" property="price" jdbcType="DECIMAL" />
+		<result column="member_price" property="memberPrice" jdbcType="DECIMAL" />
+		<result column="item_post" property="itemPost" jdbcType="DECIMAL" />
+		<result column="total_fee" property="totalFee" jdbcType="DECIMAL" />
+		<result column="homepage_url" property="homepageUrl" jdbcType="VARCHAR" />
+    </collection>
+    
+  </resultMap>
+  
+	 <select id="findOrderDetail" resultMap="orderDetailMap" parameterType="java.lang.String">
+					SELECT
+						t.*, 
+						os.order_id os_oid,
+						os.shipping_code,
+						os.last_info,
+						os.receiver_name,
+						os.receiver_phone,
+						os.receiver_mobile,
+						os.receiver_state,
+						os.receiver_city,
+						os.receiver_district,
+						os.receiver_address,
+						os.receiver_zip
+						
+					FROM
+						(
+							SELECT
+								o.*, 
+								oi.id oi_id,
+								oi.order_id oi_oid,
+								oi.item_id,
+								oi.item_title,
+								oi.price,
+								oi.member_price,
+								oi.num,
+								oi.item_post,
+								oi.total_fee,
+								oi.homepage_url
+							FROM
+								tz_order o
+							LEFT JOIN tz_order_item oi ON o.id = oi.order_id
+						) t
+					LEFT JOIN tz_order_shipping os ON t.id = os.order_id
+					WHERE
+						t.id =#{id,jdbcType=VARCHAR}
+  </select>
+  
+  <!-- 批量处理发货 -->
+  <update id="batchShipping" parameterType="java.util.List">
+    <foreach collection="orderList" item="order" index="index" open="" close="" separator=";" >
+  	 update tz_order
+    <set >
+      <if test="order.status != null" >
+        status = #{order.status,jdbcType=INTEGER},
+      </if>
+      <if test="order.updatedTime != null" >
+        updated_time = #{order.updatedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="order.consignTime != null" >
+        consign_time = #{order.consignTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="order.operater != null" >
+        operater = #{order.operater,jdbcType=VARCHAR},
+      </if>
+     
+    </set>
+    where id =#{order.id}
+    </foreach>
+  </update>
+  
+</mapper>

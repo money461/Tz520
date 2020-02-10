@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tz.mapper.TzRecommendMapper" >
+  <resultMap id="BaseResultMap" type="com.tz.pojo.TzRecommend" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="referee_id" property="refereeId" jdbcType="VARCHAR" />
+    <result column="grade" property="grade" jdbcType="INTEGER" />
+    <result column="real_id" property="realId" jdbcType="VARCHAR" />
+    <result column="isplay" property="isplay" jdbcType="INTEGER" />
+    <result column="feedback_status" property="feedbackStatus" jdbcType="INTEGER" />
+    <result column="feedback_fee" property="feedbackFee" jdbcType="INTEGER" />
+    <result column="feedback_time" property="feedbackTime" jdbcType="TIMESTAMP" />
+    <result column="mall_id" property="mallId" jdbcType="VARCHAR" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+    <result column="operater" property="operater" jdbcType="VARCHAR" />
+    <result column="top_two" property="topTwo" jdbcType="INTEGER" />
+    <result column="city_love_id" property="cityLoveId" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, user_id, referee_id, grade, real_id, isplay, feedback_status, feedback_fee, feedback_time, 
+    mall_id, created_time, updated_time, operater, top_two, city_love_id
+  </sql>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.tz.pojo.TzRecommendExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tz_recommend
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from tz_recommend
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from tz_recommend
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.tz.pojo.TzRecommendExample" >
+    delete from tz_recommend
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.tz.pojo.TzRecommend" >
+    insert into tz_recommend (id, user_id, referee_id, 
+      grade, real_id, isplay, 
+      feedback_status, feedback_fee, feedback_time, 
+      mall_id, created_time, updated_time, 
+      operater, top_two, city_love_id
+      )
+    values (#{id,jdbcType=VARCHAR}, #{userId,jdbcType=VARCHAR}, #{refereeId,jdbcType=VARCHAR}, 
+      #{grade,jdbcType=INTEGER}, #{realId,jdbcType=VARCHAR}, #{isplay,jdbcType=INTEGER}, 
+      #{feedbackStatus,jdbcType=INTEGER}, #{feedbackFee,jdbcType=INTEGER}, #{feedbackTime,jdbcType=TIMESTAMP}, 
+      #{mallId,jdbcType=VARCHAR}, #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP}, 
+      #{operater,jdbcType=VARCHAR}, #{topTwo,jdbcType=INTEGER}, #{cityLoveId,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.tz.pojo.TzRecommend" >
+    insert into tz_recommend
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="userId != null" >
+        user_id,
+      </if>
+      <if test="refereeId != null" >
+        referee_id,
+      </if>
+      <if test="grade != null" >
+        grade,
+      </if>
+      <if test="realId != null" >
+        real_id,
+      </if>
+      <if test="isplay != null" >
+        isplay,
+      </if>
+      <if test="feedbackStatus != null" >
+        feedback_status,
+      </if>
+      <if test="feedbackFee != null" >
+        feedback_fee,
+      </if>
+      <if test="feedbackTime != null" >
+        feedback_time,
+      </if>
+      <if test="mallId != null" >
+        mall_id,
+      </if>
+      <if test="createdTime != null" >
+        created_time,
+      </if>
+      <if test="updatedTime != null" >
+        updated_time,
+      </if>
+      <if test="operater != null" >
+        operater,
+      </if>
+      <if test="topTwo != null" >
+        top_two,
+      </if>
+      <if test="cityLoveId != null" >
+        city_love_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="userId != null" >
+        #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="refereeId != null" >
+        #{refereeId,jdbcType=VARCHAR},
+      </if>
+      <if test="grade != null" >
+        #{grade,jdbcType=INTEGER},
+      </if>
+      <if test="realId != null" >
+        #{realId,jdbcType=VARCHAR},
+      </if>
+      <if test="isplay != null" >
+        #{isplay,jdbcType=INTEGER},
+      </if>
+      <if test="feedbackStatus != null" >
+        #{feedbackStatus,jdbcType=INTEGER},
+      </if>
+      <if test="feedbackFee != null" >
+        #{feedbackFee,jdbcType=INTEGER},
+      </if>
+      <if test="feedbackTime != null" >
+        #{feedbackTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mallId != null" >
+        #{mallId,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null" >
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedTime != null" >
+        #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="operater != null" >
+        #{operater,jdbcType=VARCHAR},
+      </if>
+      <if test="topTwo != null" >
+        #{topTwo,jdbcType=INTEGER},
+      </if>
+      <if test="cityLoveId != null" >
+        #{cityLoveId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.tz.pojo.TzRecommendExample" resultType="java.lang.Integer" >
+    select count(*) from tz_recommend
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update tz_recommend
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.userId != null" >
+        user_id = #{record.userId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.refereeId != null" >
+        referee_id = #{record.refereeId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.grade != null" >
+        grade = #{record.grade,jdbcType=INTEGER},
+      </if>
+      <if test="record.realId != null" >
+        real_id = #{record.realId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.isplay != null" >
+        isplay = #{record.isplay,jdbcType=INTEGER},
+      </if>
+      <if test="record.feedbackStatus != null" >
+        feedback_status = #{record.feedbackStatus,jdbcType=INTEGER},
+      </if>
+      <if test="record.feedbackFee != null" >
+        feedback_fee = #{record.feedbackFee,jdbcType=INTEGER},
+      </if>
+      <if test="record.feedbackTime != null" >
+        feedback_time = #{record.feedbackTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.mallId != null" >
+        mall_id = #{record.mallId,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdTime != null" >
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updatedTime != null" >
+        updated_time = #{record.updatedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.operater != null" >
+        operater = #{record.operater,jdbcType=VARCHAR},
+      </if>
+      <if test="record.topTwo != null" >
+        top_two = #{record.topTwo,jdbcType=INTEGER},
+      </if>
+      <if test="record.cityLoveId != null" >
+        city_love_id = #{record.cityLoveId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update tz_recommend
+    set id = #{record.id,jdbcType=VARCHAR},
+      user_id = #{record.userId,jdbcType=VARCHAR},
+      referee_id = #{record.refereeId,jdbcType=VARCHAR},
+      grade = #{record.grade,jdbcType=INTEGER},
+      real_id = #{record.realId,jdbcType=VARCHAR},
+      isplay = #{record.isplay,jdbcType=INTEGER},
+      feedback_status = #{record.feedbackStatus,jdbcType=INTEGER},
+      feedback_fee = #{record.feedbackFee,jdbcType=INTEGER},
+      feedback_time = #{record.feedbackTime,jdbcType=TIMESTAMP},
+      mall_id = #{record.mallId,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      updated_time = #{record.updatedTime,jdbcType=TIMESTAMP},
+      operater = #{record.operater,jdbcType=VARCHAR},
+      top_two = #{record.topTwo,jdbcType=INTEGER},
+      city_love_id = #{record.cityLoveId,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tz.pojo.TzRecommend" >
+    update tz_recommend
+    <set >
+      <if test="userId != null" >
+        user_id = #{userId,jdbcType=VARCHAR},
+      </if>
+      <if test="refereeId != null" >
+        referee_id = #{refereeId,jdbcType=VARCHAR},
+      </if>
+      <if test="grade != null" >
+        grade = #{grade,jdbcType=INTEGER},
+      </if>
+      <if test="realId != null" >
+        real_id = #{realId,jdbcType=VARCHAR},
+      </if>
+      <if test="isplay != null" >
+        isplay = #{isplay,jdbcType=INTEGER},
+      </if>
+      <if test="feedbackStatus != null" >
+        feedback_status = #{feedbackStatus,jdbcType=INTEGER},
+      </if>
+      <if test="feedbackFee != null" >
+        feedback_fee = #{feedbackFee,jdbcType=INTEGER},
+      </if>
+      <if test="feedbackTime != null" >
+        feedback_time = #{feedbackTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="mallId != null" >
+        mall_id = #{mallId,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null" >
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedTime != null" >
+        updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="operater != null" >
+        operater = #{operater,jdbcType=VARCHAR},
+      </if>
+      <if test="topTwo != null" >
+        top_two = #{topTwo,jdbcType=INTEGER},
+      </if>
+      <if test="cityLoveId != null" >
+        city_love_id = #{cityLoveId,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tz.pojo.TzRecommend" >
+    update tz_recommend
+    set user_id = #{userId,jdbcType=VARCHAR},
+      referee_id = #{refereeId,jdbcType=VARCHAR},
+      grade = #{grade,jdbcType=INTEGER},
+      real_id = #{realId,jdbcType=VARCHAR},
+      isplay = #{isplay,jdbcType=INTEGER},
+      feedback_status = #{feedbackStatus,jdbcType=INTEGER},
+      feedback_fee = #{feedbackFee,jdbcType=INTEGER},
+      feedback_time = #{feedbackTime,jdbcType=TIMESTAMP},
+      mall_id = #{mallId,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+      operater = #{operater,jdbcType=VARCHAR},
+      top_two = #{topTwo,jdbcType=INTEGER},
+      city_love_id = #{cityLoveId,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

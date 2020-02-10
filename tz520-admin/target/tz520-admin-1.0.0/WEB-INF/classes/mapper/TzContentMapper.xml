@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tz.mapper.TzContentMapper" >
+  <resultMap id="BaseResultMap" type="com.tz.pojo.TzContent" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="content_category_id" property="contentCategoryId" jdbcType="INTEGER" />
+    <result column="content_title" property="contentTitle" jdbcType="VARCHAR" />
+    <result column="sub_title" property="subTitle" jdbcType="VARCHAR" />
+    <result column="title_desc" property="titleDesc" jdbcType="VARCHAR" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="pic_first_url" property="picFirstUrl" jdbcType="VARCHAR" />
+    <result column="pic_second_url" property="picSecondUrl" jdbcType="VARCHAR" />
+    <result column="operater" property="operater" jdbcType="VARCHAR" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.tz.pojo.TzContent" extends="BaseResultMap" >
+    <result column="content_desc" property="contentDesc" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, content_category_id, content_title, sub_title, title_desc, url, pic_first_url, 
+    pic_second_url, operater, created_time, updated_time
+  </sql>
+  <sql id="Blob_Column_List" >
+    content_desc
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.tz.pojo.TzContentExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from tz_content
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.tz.pojo.TzContentExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from tz_content
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from tz_content
+    where id = #{id,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from tz_content
+    where id = #{id,jdbcType=VARCHAR}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.tz.pojo.TzContentExample" >
+    delete from tz_content
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.tz.pojo.TzContent" >
+    insert into tz_content (id, content_category_id, content_title, 
+      sub_title, title_desc, url, 
+      pic_first_url, pic_second_url, operater, 
+      created_time, updated_time, content_desc
+      )
+    values (#{id,jdbcType=VARCHAR}, #{contentCategoryId,jdbcType=INTEGER}, #{contentTitle,jdbcType=VARCHAR}, 
+      #{subTitle,jdbcType=VARCHAR}, #{titleDesc,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR}, 
+      #{picFirstUrl,jdbcType=VARCHAR}, #{picSecondUrl,jdbcType=VARCHAR}, #{operater,jdbcType=VARCHAR}, 
+      #{createdTime,jdbcType=TIMESTAMP}, #{updatedTime,jdbcType=TIMESTAMP}, #{contentDesc,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.tz.pojo.TzContent" >
+    insert into tz_content
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="contentCategoryId != null" >
+        content_category_id,
+      </if>
+      <if test="contentTitle != null" >
+        content_title,
+      </if>
+      <if test="subTitle != null" >
+        sub_title,
+      </if>
+      <if test="titleDesc != null" >
+        title_desc,
+      </if>
+      <if test="url != null" >
+        url,
+      </if>
+      <if test="picFirstUrl != null" >
+        pic_first_url,
+      </if>
+      <if test="picSecondUrl != null" >
+        pic_second_url,
+      </if>
+      <if test="operater != null" >
+        operater,
+      </if>
+      <if test="createdTime != null" >
+        created_time,
+      </if>
+      <if test="updatedTime != null" >
+        updated_time,
+      </if>
+      <if test="contentDesc != null" >
+        content_desc,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=VARCHAR},
+      </if>
+      <if test="contentCategoryId != null" >
+        #{contentCategoryId,jdbcType=INTEGER},
+      </if>
+      <if test="contentTitle != null" >
+        #{contentTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="subTitle != null" >
+        #{subTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="titleDesc != null" >
+        #{titleDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="picFirstUrl != null" >
+        #{picFirstUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="picSecondUrl != null" >
+        #{picSecondUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="operater != null" >
+        #{operater,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null" >
+        #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedTime != null" >
+        #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="contentDesc != null" >
+        #{contentDesc,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <select id="countByExample" parameterType="com.tz.pojo.TzContentExample" resultType="java.lang.Integer" >
+    select count(*) from tz_content
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update tz_content
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=VARCHAR},
+      </if>
+      <if test="record.contentCategoryId != null" >
+        content_category_id = #{record.contentCategoryId,jdbcType=INTEGER},
+      </if>
+      <if test="record.contentTitle != null" >
+        content_title = #{record.contentTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="record.subTitle != null" >
+        sub_title = #{record.subTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="record.titleDesc != null" >
+        title_desc = #{record.titleDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="record.url != null" >
+        url = #{record.url,jdbcType=VARCHAR},
+      </if>
+      <if test="record.picFirstUrl != null" >
+        pic_first_url = #{record.picFirstUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.picSecondUrl != null" >
+        pic_second_url = #{record.picSecondUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="record.operater != null" >
+        operater = #{record.operater,jdbcType=VARCHAR},
+      </if>
+      <if test="record.createdTime != null" >
+        created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.updatedTime != null" >
+        updated_time = #{record.updatedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.contentDesc != null" >
+        content_desc = #{record.contentDesc,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update tz_content
+    set id = #{record.id,jdbcType=VARCHAR},
+      content_category_id = #{record.contentCategoryId,jdbcType=INTEGER},
+      content_title = #{record.contentTitle,jdbcType=VARCHAR},
+      sub_title = #{record.subTitle,jdbcType=VARCHAR},
+      title_desc = #{record.titleDesc,jdbcType=VARCHAR},
+      url = #{record.url,jdbcType=VARCHAR},
+      pic_first_url = #{record.picFirstUrl,jdbcType=VARCHAR},
+      pic_second_url = #{record.picSecondUrl,jdbcType=VARCHAR},
+      operater = #{record.operater,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      updated_time = #{record.updatedTime,jdbcType=TIMESTAMP},
+      content_desc = #{record.contentDesc,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update tz_content
+    set id = #{record.id,jdbcType=VARCHAR},
+      content_category_id = #{record.contentCategoryId,jdbcType=INTEGER},
+      content_title = #{record.contentTitle,jdbcType=VARCHAR},
+      sub_title = #{record.subTitle,jdbcType=VARCHAR},
+      title_desc = #{record.titleDesc,jdbcType=VARCHAR},
+      url = #{record.url,jdbcType=VARCHAR},
+      pic_first_url = #{record.picFirstUrl,jdbcType=VARCHAR},
+      pic_second_url = #{record.picSecondUrl,jdbcType=VARCHAR},
+      operater = #{record.operater,jdbcType=VARCHAR},
+      created_time = #{record.createdTime,jdbcType=TIMESTAMP},
+      updated_time = #{record.updatedTime,jdbcType=TIMESTAMP}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tz.pojo.TzContent" >
+    update tz_content
+    <set >
+      <if test="contentCategoryId != null" >
+        content_category_id = #{contentCategoryId,jdbcType=INTEGER},
+      </if>
+      <if test="contentTitle != null" >
+        content_title = #{contentTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="subTitle != null" >
+        sub_title = #{subTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="titleDesc != null" >
+        title_desc = #{titleDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="url != null" >
+        url = #{url,jdbcType=VARCHAR},
+      </if>
+      <if test="picFirstUrl != null" >
+        pic_first_url = #{picFirstUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="picSecondUrl != null" >
+        pic_second_url = #{picSecondUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="operater != null" >
+        operater = #{operater,jdbcType=VARCHAR},
+      </if>
+      <if test="createdTime != null" >
+        created_time = #{createdTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updatedTime != null" >
+        updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="contentDesc != null" >
+        content_desc = #{contentDesc,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.tz.pojo.TzContent" >
+    update tz_content
+    set content_category_id = #{contentCategoryId,jdbcType=INTEGER},
+      content_title = #{contentTitle,jdbcType=VARCHAR},
+      sub_title = #{subTitle,jdbcType=VARCHAR},
+      title_desc = #{titleDesc,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR},
+      pic_first_url = #{picFirstUrl,jdbcType=VARCHAR},
+      pic_second_url = #{picSecondUrl,jdbcType=VARCHAR},
+      operater = #{operater,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      updated_time = #{updatedTime,jdbcType=TIMESTAMP},
+      content_desc = #{contentDesc,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tz.pojo.TzContent" >
+    update tz_content
+    set content_category_id = #{contentCategoryId,jdbcType=INTEGER},
+      content_title = #{contentTitle,jdbcType=VARCHAR},
+      sub_title = #{subTitle,jdbcType=VARCHAR},
+      title_desc = #{titleDesc,jdbcType=VARCHAR},
+      url = #{url,jdbcType=VARCHAR},
+      pic_first_url = #{picFirstUrl,jdbcType=VARCHAR},
+      pic_second_url = #{picSecondUrl,jdbcType=VARCHAR},
+      operater = #{operater,jdbcType=VARCHAR},
+      created_time = #{createdTime,jdbcType=TIMESTAMP},
+      updated_time = #{updatedTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=VARCHAR}
+  </update>
+</mapper>

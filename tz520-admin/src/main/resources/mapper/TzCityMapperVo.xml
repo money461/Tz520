@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tz.mapper.vo.TzCityMapperVo">
+  <resultMap id="BaseResultMap" type="com.tz.pojo.vo.CityVo">
+    <id column="id" jdbcType="VARCHAR" property="id" />
+    <result column="city_name" jdbcType="VARCHAR" property="cityName" />
+    <result column="state" jdbcType="INTEGER" property="state" />
+    <result column="operator" jdbcType="VARCHAR" property="operator" />
+    <result column="created_time" jdbcType="TIMESTAMP" property="createdTime" />
+    <result column="updated_time" jdbcType="TIMESTAMP" property="updatedTime" />
+    
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="userCityId" property="userCityId" jdbcType="VARCHAR" />
+  </resultMap>
+  <select id="selectCityAndUserList" resultMap="BaseResultMap"  parameterType="java.util.HashMap" >
+	  SELECT
+		tz_city.id,
+		tz_city.city_name,
+		tz_city.state,
+		tz_city.created_time,
+		tz_city.updated_time,
+		tz_user.user_name,
+		tz_user.phone
+	FROM
+		`tz_city`
+	LEFT JOIN tz_user_city ON tz_city.id = tz_user_city.city_id
+	LEFT JOIN tz_user ON (tz_user.id = tz_user_city.user_id)
+	WHERE
+		1=1
+		<if test ="cityName!= null">
+			AND	tz_city.city_name LIKE  #{cityName,jdbcType=VARCHAR}
+		</if>
+	    <if test ="startTime!= null">
+				AND  tz_city.create_time between #{startTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
+		</if>
+		GROUP BY tz_city.city_name
+		ORDER BY tz_city.created_time DESC
+  </select>
+  <select id="selectCityAndUserNList" resultMap="BaseResultMap"  parameterType="java.util.HashMap" >
+	  SELECT
+	  	tz_user_city.id as userCityId,
+		tz_city.id,
+		tz_city.city_name,
+		tz_city.state,
+		tz_city.created_time,
+		tz_city.updated_time,
+		tz_user.user_name,
+		tz_user.phone
+	FROM
+		`tz_city`
+	INNER JOIN tz_user_city ON tz_city.id = tz_user_city.city_id
+	INNER JOIN tz_user ON (tz_user.id = tz_user_city.user_id)
+	WHERE
+		1=1
+			AND	tz_user.id  = #{userId,jdbcType=VARCHAR}
+			AND	tz_city.state = 1
+		<if test ="type!= null">
+			AND	tz_user_city.type =  #{type,jdbcType=VARCHAR}
+		</if>
+		<if test ="cityName!= null">
+			AND	tz_city.city_name LIKE  #{cityName,jdbcType=VARCHAR}
+		</if>
+	    <if test ="startTime!= null">
+				AND  tz_city.create_time between #{startTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
+		</if>
+		ORDER BY tz_city.created_time DESC
+  </select>
+  <select id="selectCityNotUserList" resultMap="BaseResultMap"  parameterType="java.util.HashMap" >
+	    SELECT
+		tz_city.id,
+		tz_city.city_name
+	FROM
+		tz_city
+	WHERE
+		tz_city.state=1 AND
+		tz_city.id NOT IN (
+			SELECT
+				tz_city.id
+			FROM
+				tz_city
+			INNER JOIN tz_user_city ON (tz_city.id = tz_user_city.city_id)
+			WHERE
+				1=1
+			<if test ="type!= null">
+				AND	tz_user_city.type =  #{type,jdbcType=VARCHAR}
+			</if>
+		)
+		ORDER BY tz_city.created_time DESC
+  </select>
+</mapper>

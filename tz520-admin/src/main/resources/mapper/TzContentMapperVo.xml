@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tz.mapper.vo.TzContentMapperVo" >
+  <resultMap id="BaseResultMap" type="com.tz.pojo.vo.TzContentVo" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="content_category_id" property="contentCategoryId" jdbcType="INTEGER" />
+     <result column="name" property="categoryName" jdbcType="VARCHAR" />
+    <result column="content_title" property="contentTitle" jdbcType="VARCHAR" />
+    <result column="sub_title" property="subTitle" jdbcType="VARCHAR" />
+    <result column="title_desc" property="titleDesc" jdbcType="VARCHAR" />
+    <result column="content_desc" property="contentDesc" jdbcType="LONGVARCHAR" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="pic_first_url" property="picFirstUrl" jdbcType="VARCHAR" />
+    <result column="pic_second_url" property="picSecondUrl" jdbcType="VARCHAR" />
+    <result column="operater" property="operater" jdbcType="VARCHAR" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.tz.pojo.TzContent" extends="BaseResultMap" >
+    <result column="content_desc" property="contentDesc" jdbcType="LONGVARCHAR" />
+  </resultMap>
+ 
+  <!-- 查询 -->
+  <select id="selectTzContentList" resultMap="BaseResultMap" parameterType="java.util.Map">
+			  	 SELECT
+				r.content_category_id,
+				c. NAME,
+				r.id,
+				r.content_title,
+				r.title_desc,
+				r.url,
+				r.content_desc,
+				r.operater,
+				r.created_time,
+				r.updated_time
+			FROM
+				tz_content_category c,
+				(
+					SELECT
+						id,
+						content_category_id,
+						content_title,
+						sub_title,
+						title_desc,
+						url,
+						content_desc,
+						operater,
+						created_time,
+						updated_time
+					FROM
+						`tz_content`
+				) r
+			WHERE
+				r.content_category_id = c.id
+		<if test="contentTitle!=null">
+			 AND r.content_title like #{contentTitle,jdbcType=VARCHAR}
+		</if>
+		<if test="subTitle!=null">
+			 AND r.sub_title like #{subTitle,jdbcType=VARCHAR}
+		</if>
+		<if test="contentCategoryId!=null">
+			 AND r.content_category_id like #{contentCategoryId,jdbcType=INTEGER}
+		</if>
+	   <if test ="startTime!= null">
+			AND  r.created_time between #{startTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
+		</if>
+			ORDER BY
+				r.created_time DESC
+  </select>
+  
+  <!--批量删除  -->
+  <delete id="batchDeleteContent" parameterType="java.util.List">
+  	delete from tz_content 
+  	where id in
+  	<foreach collection="strId" item="id" open="(" separator="," close=")">
+  		#{id}
+  	</foreach>
+  </delete>
+  
+  <!-- 查询详情 -->
+  <select id="queryContentDetail" resultMap="BaseResultMap"  parameterType="java.lang.String">
+  			 SELECT
+				r.content_category_id,
+				c. NAME,
+				r.id,
+				r.content_title,
+				r.title_desc,
+				r.url,
+				r.content_desc,
+				r.pic_first_url,
+				r.pic_second_url,
+				r.operater,
+				r.created_time,
+				r.updated_time
+			FROM
+				tz_content_category c,
+				(
+					SELECT
+						id,
+						content_category_id,
+						content_title,
+						sub_title,
+						title_desc,
+						url,
+						content_desc,
+						pic_first_url,
+						pic_second_url,
+						operater,
+						created_time,
+						updated_time
+					FROM
+						`tz_content`
+						where id=#{id,jdbcType=VARCHAR}
+				) r
+			WHERE
+				r.content_category_id = c.id
+  </select>
+  
+</mapper>

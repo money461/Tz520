@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tz.mapper.vo.TzUserLoveConsumptionDetailsMapperVo" >
+  <resultMap id="BaseResultMap" type="com.tz.pojo.vo.UserLoveConsumptionDetailsVo" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="user_id" property="userId" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="consume_val" property="consumeVal" jdbcType="INTEGER" />
+    <result column="show_type" property="showType" jdbcType="INTEGER" />
+    <result column="show_account" property="showAccount" jdbcType="VARCHAR" />
+    <result column="order_id" property="orderId" jdbcType="VARCHAR" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+    <result column="operater" property="operater" jdbcType="VARCHAR" />
+    
+    <result column="user_name" property="userName" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+  </resultMap>
+  <select id="selectLoveDetailAndUserList" resultMap="BaseResultMap"  parameterType="java.util.HashMap" >
+	  SELECT
+		u.user_name,
+		u.phone,
+		ulcd.*
+	FROM
+		tz_user AS u
+	INNER JOIN `tz_user_love_consumption_details` AS ulcd ON u.id = ulcd.user_id
+	WHERE
+		1=1
+	 <if test ="userId!= null">
+		AND ulcd.user_id =  = #{userId,jdbcType=VARCHAR}
+	 </if>
+	 <if test ="phone!= null">
+		AND u.phone LIKE  #{phone,jdbcType=VARCHAR}
+	 </if>
+	 <if test ="startTime!= null">
+		AND  ulcd.create_time between #{startTime,jdbcType=TIMESTAMP} and #{endTime,jdbcType=TIMESTAMP}
+	 </if>
+	ORDER BY
+		ulcd.created_time DESC
+  </select>
+</mapper>

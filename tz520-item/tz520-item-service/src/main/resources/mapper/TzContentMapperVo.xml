@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tz.mapper.vo.TzContentMapperVo" >
+  <resultMap id="BaseResultMap" type="com.tz.pojo.vo.TzContentVo" >
+    <id column="id" property="id" jdbcType="VARCHAR" />
+    <result column="content_category_id" property="contentCategoryId" jdbcType="INTEGER" />
+    <result column="content_title" property="contentTitle" jdbcType="VARCHAR" />
+    <result column="sub_title" property="subTitle" jdbcType="VARCHAR" />
+    <result column="title_desc" property="titleDesc" jdbcType="VARCHAR" />
+    <result column="url" property="url" jdbcType="VARCHAR" />
+    <result column="pic_first_url" property="picFirstUrl" jdbcType="VARCHAR" />
+    <result column="pic_second_url" property="picSecondUrl" jdbcType="VARCHAR" />
+    <result column="operater" property="operater" jdbcType="VARCHAR" />
+    <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+    <result column="updated_time" property="updatedTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+   <resultMap id="ResultMapWithBLOBs" type="com.tz.pojo.TzContent" extends="BaseResultMap" >
+    <result column="content_desc" property="contentDesc" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  
+  <!-- App首页广告以及轮播图 -->
+  <resultMap type="com.tz.pojo.vo.TzHomePageContent" id="homePageContentMap">
+       <id column="id" property="contentCategoryId" jdbcType="INTEGER" />
+       <result column="name" property="contentCategoryName" jdbcType="VARCHAR" />
+        <result column="link_address" property="linkAddress" jdbcType="VARCHAR" />
+        
+  	<collection property="contentList" ofType="com.tz.pojo.vo.TzContentVo">
+  		 <result column="content_title" property="contentTitle" jdbcType="VARCHAR" />
+  		  <result column="url" property="url" jdbcType="VARCHAR" />
+  		  <result column="pic_first_url" property="picFirstUrl" jdbcType="VARCHAR" />
+  		  <result column="content_desc" property="contentDesc" jdbcType="LONGVARCHAR" />
+  		  <result column="created_time" property="createdTime" jdbcType="TIMESTAMP" />
+  	</collection>
+  </resultMap>
+  
+  <select id="homePageContent" resultMap="homePageContentMap">
+				 SELECT
+			ca.id,
+			ca.name,
+			ca.link_address,
+			r.content_title,
+			r.url,
+			r.pic_first_url,
+			r.content_desc,
+			r.created_time
+		FROM
+			tz_content_category ca
+		INNER JOIN tz_content r ON ca.id = r.content_category_id
+		WHERE
+			ca.sort IN (1, 2, 3)
+		ORDER BY
+			ca.sort ASC
+  </select>
+  
+
+  <!--商城首页轮播图查询 3张 -->
+  <resultMap type="com.tz.pojo.vo.TzContentVo" id="showMallContentMap">
+  	 <result column="url" property="url" jdbcType="VARCHAR" />
+  	 <result column="pic_first_url" property="picFirstUrl" jdbcType="VARCHAR" />
+  </resultMap>
+	  <select id="showMallContent" resultMap="showMallContentMap">
+			SELECT
+				c.url,
+				c.pic_first_url
+			FROM
+				tz_content_category ca
+			INNER JOIN tz_content c ON c.content_category_id = ca.id
+			WHERE
+				sort = 4
+			ORDER BY
+				c.created_time
+			LIMIT 3
+  </select>
+</mapper>

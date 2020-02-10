@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tz.mapper.vo.TzContentCategoryMapperVo" >
+  <resultMap id="BaseResultMap" type="com.tz.pojo.vo.TzContentCategoryVo" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="logo_url" property="logoUrl" jdbcType="VARCHAR" />
+    <result column="link_address" property="linkAddress" jdbcType="VARCHAR" />
+    <result column="sort" property="sort" jdbcType="INTEGER" />
+  </resultMap>
+  
+  <!-- 查询App首页的广告分类信息 -->
+   <select id="queryMallContentCategory" resultMap="BaseResultMap">
+		   		SELECT
+			tz_content_category.id,
+			tz_content_category.`name`,
+			tz_content_category.logo_url,
+			tz_content_category.link_address,
+			tz_content_category.sort
+		FROM
+			`tz_content_category`
+		WHERE
+			sort IN (5, 6, 7, 8)
+		ORDER BY
+			sort ASC
+   </select>
+  
+</mapper>
